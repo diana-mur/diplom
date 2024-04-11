@@ -30,6 +30,7 @@ const Lesson = sequelize.define('lesson', {
     ageUnder: { type: DataTypes.INTEGER },
     ageUp: { type: DataTypes.INTEGER },
     image: { type: DataTypes.STRING },
+    finish: { type: DataTypes.INTEGER },
     invite: { type: DataTypes.INTEGER },
 });
 

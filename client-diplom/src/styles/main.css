@@ -1,0 +1,256 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.2;
+  font-weight: 400;
+  color: white;
+  font-synthesis: none;
+  background: linear-gradient(110.71deg, rgb(44, 67, 95) 6.352%, rgb(6, 23, 44) 59.163%), no-repeat;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-family: "Aqum Two", sans-serif;
+  font-variant: small-caps;
+  font-size: calc(48px + 16 * (100vw - 1280px) / 640);
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-family: "Aqum Two", sans-serif;
+  font-size: calc(24px + 12 * (100vw - 1280px) / 640);
+  margin-bottom: 30px;
+  text-align: right;
+}
+
+p {
+  font-size: calc(12px + 4 * (100vw - 1280px) / 640);
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+button {
+  font-family: "Aqum Two", sans-serif;
+  border: none;
+  padding: 11px 46px 15px;
+  border-radius: 19px;
+  text-shadow: 2px 1px 3.2px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 25.4px 2px rgba(255, 255, 255, 0.25), inset -5px -5px 2.6px 0 rgba(44, 67, 95, 0.61);
+}
+
+.blue {
+  background-color: #7EB9FF;
+  color: white;
+  font-size: 20px;
+}
+
+.white {
+  font-size: 16px;
+}
+
+header {
+  display: flex;
+  padding: 36px 50px;
+  justify-content: space-between;
+}
+
+.container {
+  padding: 0 50px;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  font-family: "Aqum Two", sans-serif;
+  font-size: 20px;
+  font-variant: small-caps;
+}
+
+.star7, .star6, .star5, .star4, .star3, .star2, .star1 {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  z-index: -150;
+}
+
+.star1 {
+  left: 10vw;
+  top: 62vh;
+}
+
+.star2 {
+  left: 25vw;
+  top: 9vh;
+}
+
+.star3 {
+  left: 35vw;
+  top: 71vh;
+}
+
+.star4 {
+  right: 46vw;
+  top: 52vh;
+}
+
+.star5 {
+  right: 30vw;
+  top: 25vh;
+}
+
+.star6 {
+  right: 14vw;
+  top: 55vh;
+}
+
+.star7 {
+  right: 7vw;
+  top: 13vh;
+}
+
+.nebula3, .nebula2, .nebula1 {
+  z-index: -160;
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background-color: #2C435F;
+  filter: blur(150px);
+}
+
+.nebula1 {
+  left: 19vw;
+  top: 15vh;
+}
+
+.nebula2 {
+  right: 18vw;
+  top: 44vh;
+}
+
+.nebula3 {
+  right: -9vw;
+  top: -16vh;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.leftText {
+  width: fit-content;
+}
+
+.rightText {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.mainImage {
+  z-index: -100;
+  height: auto;
+  width: auto;
+  overflow: hidden;
+  position: absolute;
+  width: 40%;
+  left: 30%;
+}
+
+.mainImg {
+  position: absolute;
+  width: 750px;
+  height: 750px;
+  top: 124px;
+  left: calc((100% - 750px) / 2);
+  z-index: -100;
+}
+
+.circle {
+  border-radius: 50%;
+  background-color: transparent;
+  height: 750px;
+  width: 750px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: -99;
+}
+
+.earth {
+  margin-top: 150px;
+  height: 407px;
+  width: 321px;
+  z-index: -98;
+}
+
+.circle8, .circle7, .circle6, .circle5, .circle4, .circle3, .circle2, .circle1 {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.circle1 {
+  left: 300px;
+}
+
+.circle2 {
+  top: 105px;
+  right: 85px;
+}
+
+.circle3 {
+  top: 300px;
+  right: 0px;
+}
+
+.circle4 {
+  bottom: 105px;
+  right: 85px;
+}
+
+.circle5 {
+  bottom: 0px;
+  right: 300px;
+}
+
+.circle6 {
+  bottom: 105px;
+  left: 85px;
+}
+
+.circle7 {
+  top: 300px;
+  left: 0px;
+}
+
+.circle8 {
+  top: 105px;
+  left: 85px;
+}
+
+/*# sourceMappingURL=main.css.map */
