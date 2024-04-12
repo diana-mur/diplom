@@ -11,8 +11,8 @@ import testRouter from "./routes/testRouter.js";
 const app = express()
 const PORT = process.env.PORT
 
-app.use(cors())
 app.use(express.json())
+app.use(cors())
 app.use('/api/users', userRouter)
 app.use('/api/comments', commentRouter)
 app.use('/api/lessons', lessonRouter)

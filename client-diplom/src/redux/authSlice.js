@@ -8,7 +8,7 @@ const initialState = {
 }
 
 export const authSlice = createSlice({
-    name: "authSlice",
+    name: "auth",
     initialState,
     reducers: {
         logOut: (state) => {
@@ -27,11 +27,13 @@ export const authSlice = createSlice({
         })
         builder.addCase(authThunk.fulfilled, (state, action) => {
             const payload = action.payload
+            console.log(payload.message);
 
-            state.id = payload.user.id
+            state.message = payload.message
+            state.id = payload.user?.id
             state.token = payload.token
 
-            localStorage.setItem("id", payload.user.id)
+            localStorage.setItem("id", payload.user?.id)
             localStorage.setItem("token", payload.token)
 
             state.error = undefined
@@ -40,30 +42,30 @@ export const authSlice = createSlice({
         builder.addCase(authThunk.rejected, (state, action) => {
             const payload = action.payload
 
-            state.loading = false
             state.error = payload.message
+            state.loading = false
         })
     }
 })
 
 export const authThunk = createAsyncThunk('authThunk', async (data, { rejectWithValue }) => {
     try {
-        const response = await fetch(`http://localhost:6000/api/users/auth`, {
+        const response = await fetch(`http://localhost:8080/api/users/auth`, {
             method: 'POST',
-            mode: "cors",
+            mode: 'cors',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         })
-        const resjson = await response.json()
+        const json = await response.json()
         if (response.status == 400) {
-            return rejectWithValue(resjson)
+            return rejectWithValue(json)
         }
-        return resjson
+        return json
     } catch (error) {
         console.log(error);
-        rejectWithValue(error.message)
+        return rejectWithValue(error)
     }
 })
 
