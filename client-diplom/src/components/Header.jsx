@@ -8,7 +8,7 @@ export const Header = () => {
 
     return (
         <header>
-            <Link to={'/home'} className="logo">ДетиВДеле</Link>
+            <Link to={'/'} className="logo">ДетиВДеле</Link>
             <button onClick={token ? () => navigate('/profile') :
             location.pathname == '/auth' ? () => navigate('/reg') : () => navigate('/auth')} className="white">{token ? "профиль" : location.pathname == '/auth' ? "зарегистрироваться" : "вход"}</button>
         </header>

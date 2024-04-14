@@ -1,10 +1,15 @@
 import bcrypt from "bcrypt"
 import models from "../models/models.js"
 import { generateAccessToken } from "../generateToken/generateToken.js"
+import { validationResult } from "express-validator"
 
 const User = models.User
 
 export const reg = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array());
+    }
     const { surname, name, birthday, email, password } = req.body
 
     let user = await User.findOne({ where: { email } })
@@ -25,7 +30,7 @@ export const auth = async (req, res) => {
 
     const user = await User.findOne({ where: { email } })
 
-    if (!user) return res.send({ message: 'Адрес эл. почты некорректен' })
+    if (!user) return res.send({ message: 'Адрес эл. почты не найден' })
 
     const isValidPassword = bcrypt.compareSync(password, user.password)
 

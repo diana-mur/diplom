@@ -30,6 +30,7 @@ export const regSlice = createSlice({
             const payload = action.payload
 
             state.error = payload
+            state.message = payload.message
             state.loading = false
         })
     }

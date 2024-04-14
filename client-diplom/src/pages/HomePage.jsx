@@ -70,7 +70,7 @@ export const HomePage = () => {
 
     return (
         <>
-        <Header/>
+        {/* <Header/> */}
             <section>
                 <Background />
                 <div className="container space-between aling-center">

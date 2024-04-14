@@ -30,14 +30,16 @@ export const authSlice = createSlice({
             console.log(payload.message);
 
             state.message = payload.message
-            state.id = payload.user?.id
-            state.token = payload.token
+            if (payload.user && payload.token) {
+                state.id = payload.user?.id
+                state.token = payload.token
 
-            localStorage.setItem("id", payload.user?.id)
-            localStorage.setItem("token", payload.token)
+                localStorage.setItem("id", payload.user?.id)
+                localStorage.setItem("token", payload.token)
 
-            state.error = undefined
-            state.loading = false
+                state.error = undefined
+                state.loading = false
+            }
         })
         builder.addCase(authThunk.rejected, (state, action) => {
             const payload = action.payload

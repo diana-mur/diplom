@@ -15,6 +15,10 @@ const router = createBrowserRouter([
         </>,
         children: [
             {
+                path: "/",
+                element: <HomePage />
+            },
+            {
                 path: "/auth",
                 element: <Auth />
             },
@@ -25,12 +29,8 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/home",
-        element: <HomePage />
-    },
-    {
-        path: "/" || "*",
-        element: <Navigate to={'/home'} />
+        path: "*",
+        element: <Navigate to={'/'} />
     },
 ])
 

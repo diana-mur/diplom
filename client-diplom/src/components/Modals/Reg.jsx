@@ -16,7 +16,7 @@ export const Reg = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (regState.message) {
+        if (regState.user) {
             navigate('/auth')
         }
     }, [regState])
@@ -24,7 +24,7 @@ export const Reg = () => {
     const handleCheckbox = () => {
         setCheckbox(prev => !prev)
     }
-
+    console.log(regState.error)
     return (
         <div className="container column aling-center">
             <div className="titles">
@@ -41,21 +41,34 @@ export const Reg = () => {
                     <label htmlFor="checkbox">Я согласен на обработку моих персональных данных и<br /> персональных данных моего ребенка (опекуна) и согласен с<br /> <a>политикой конфиденциальности</a></label>
                 </div>
                 {
-                    regState.error && <p>{regState.error}</p>
+                    !Array.isArray(regState.error) && regState.error && <p style={{ color: "red" }}>{regState.error}</p>
                 }
                 {
-                    regState.message && <p>{regState.message}</p>
+                    !Array.isArray(regState.error) && regState.message && <p style={{ color: "red" }}>{regState.message}</p>
                 }
+                {
+                    Array.isArray(regState.error) && regState.error.length > 0 && <p style={{ color: "red" }}>{regState.error[0].msg}</p>
+                }
+                {
+                    Array.isArray(regState.error) && regState.error.length > 1 && <p style={{ color: "red" }}>{regState.error[1].msg}</p>
+                }
+
             </div>
-            <button onClick={() => {
-                dispatch(regThunk({
-                    surname,
-                    name,
-                    email,
-                    birthday: birth,
-                    password
-                }))
-            }}>зарегистрироваться</button>
+            {
+                checkbox ?
+                    <button onClick={() => {
+                        dispatch(regThunk({
+                            surname,
+                            name,
+                            email,
+                            birthday: birth,
+                            password
+                        }))
+                    }}>зарегистрироваться</button>
+                    :
+                    <button style={{ backgroundColor: "gray" }} disabled>зарегистрироваться</button>
+
+            }
         </div>
 
     )
