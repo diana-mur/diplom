@@ -13,12 +13,12 @@ export const createComment = async (req, res) => {
 }
 
 export const changeStatus = async (req, res) => {
-    const { commentId } = req.params
+    const { commentId, statusId } = req.body
     const comment = await Comment.findOne({
         where: { id: commentId }
     })
     if (!comment) return res.send({ message: "Комментарий не найден" })
-    await comment.update({ statusId: "Принят" })
+    await comment.update({ statusId })
     return res.send({ comment })
 }
 

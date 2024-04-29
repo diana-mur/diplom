@@ -1,14 +1,16 @@
 import { useState } from "react"
-import { Background } from "../components/Background"
 import { Carousel } from "../components/Carousel/Carousel"
 import { MainImage } from "../components/MainImage"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { Header } from "../components/Header"
+import { Title } from "../components/Title"
+import useWindowSize from "../hooks/windowSize"
 
 export const HomePage = () => {
     const token = useSelector((state) => state.auth.token)
     const navigate = useNavigate()
+    const { width, height } = useWindowSize();
+    const numSlides = width > 1024 ? 3 : width > 640 ? 2 : 1
 
     const cards = [
         {
@@ -70,75 +72,57 @@ export const HomePage = () => {
 
     return (
         <>
-        {/* <Header/> */}
-            <section>
-                <Background />
-                <div className="container space-between aling-center">
-                    <div className="leftText">
-                        <h1>ДетиВДеле</h1>
-                        <p>веб-приложение для детей и подростков,<br /> помогающее выбрать дополнительные<br /> общеразвивающие направления</p>
+            <div className="container flex flex-col justify-end sm:flex-row sm:justify-between items-center min-h-[90vh] sm:min-h-[80vh] relative">
+                <div className="z-20 flex flex-col justify-center mb-24 sm:justify-start sm:mb-0">
+                    <h1 className="text-center mb-5 sm:text-start">ДетиВДеле</h1>
+                    <p className="text-center sm:text-start">веб-приложение для детей и подростков,<br /> помогающее выбрать дополнительные<br /> общеразвивающие направления</p>
+                </div>
+                <MainImage />
+                <div className="flex flex-col items-center gap-8 sm:gap-6 z-20 mb-14 sm:items-end sm:mb-0">
+                    <h3 className="text-center sm:text-right leading-7">Вместе к звездам:<br /> найди свой путь<br /> в мире возможностей!</h3>
+                    <button onClick={token ? () => navigate('/') : () => navigate('/reg')} className="bg-blue-300 flex-1 w-[100%] sm:flex-grow-0 sm:w-auto">начать</button>
+                </div>
+            </div>
+            <div className="container">
+                <Title type={1} position={'text-center'} title={'Кто мы?'} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                    <div className="rounded-xl overflow-hidden box-shadow">
+                        <img src="src/assets/photo2.png" alt="" />
                     </div>
-                    <div className="mainImage">
-                        <img src="src/assets/EarthImage.png" alt="" />
+                    <div className="rounded-lg overflow-hidden box-shadow blue flex justify-center items-center p-3">
+                        <p className="text-center leading-5 text-xs  lg:text-xl">Управление по культуре и искусству администрации города Оренбурга <span className="font-semibold">запустило проект для детей Оренбуржья, который поможет им</span> раскрыть свои таланты и развить навыки</p>
                     </div>
-                    {/* <MainImage /> */}
-                    <div className="rightText">
-                        <h3 style={{
-                            textAlign: "right"
-                        }}>Вместе к звездам:<br /> найди свой путь<br /> в мире возможностей!</h3>
-                        <button onClick={token ? () => navigate('/') : () => navigate('/reg')} className="blue">начать</button>
+                    <div className="rounded-lg overflow-hidden box-shadow">
+                        <img src="src/assets/photo2.png" alt="" />
+                    </div>
+                    <div className="rounded-lg overflow-hidden box-shadow hidden sm:block">
+                        <img src="src/assets/photo2.png" alt="" />
+                    </div>
+                    <div className="rounded-lg overflow-hidden box-shadow hidden md:block">
+                        <img src="src/assets/photo2.png" alt="" />
+                    </div>
+                    <div className="rounded-lg overflow-hidden box-shadow hidden md:block">
+                        <img src="src/assets/photo2.png" alt="" />
                     </div>
                 </div>
-            </section>
-            <section>
-                <Background />
-                <div className="container column aling-center">
-                    <h2>Кто мы?</h2>
-                    <div className="galery">
-                        <div className="photo">
-                            <img src="src/assets/photo2.png" alt="" />
+            </div>
+            <Carousel title={<h2 className="mb-7">Направления</h2>} summaSlides={cards.length} numSlides={numSlides}>
+                {
+                    cards.map((card, index) => (
+                        <div className="flex flex-col items-center blue box-shadow rounded-lg px-7 py-7 min-w-full sm:min-w-[49%] lg:min-w-[32%]" key={index}>
+                            <h5 className="text-center mb-5">{card.title}</h5>
+                            <ul className="list-disc list-outside list-image-none mb-auto min-w-full" key={index}>
+                                {
+                                    card.elements.map((el, index) => (
+                                        <li className="mb-3 leading-5" key={index}>{el}</li>
+                                    ))
+                                }
+                            </ul>
+                            <button className="bg-white text-black mt-5" onClick={() => navigate('/reg')}>пройти пробное занятие</button>
                         </div>
-                        <div className="text">
-                            <h6>Управление по культуре и искусству администрации города Оренбурга <span>запустило проект для детей Оренбуржья, который поможет им</span> раскрыть свои таланты и развить навыки</h6>
-                        </div>
-                        <div className="photo">
-                            <img src="src/assets/photo2.png" alt="" />
-                        </div>
-                        <div className="photo">
-                            <img src="src/assets/photo2.png" alt="" />
-                        </div>
-                        <div className="photo">
-                            <img src="src/assets/photo2.png" alt="" />
-                        </div>
-                        <div className="photo">
-                            <img src="src/assets/photo2.png" alt="" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <Background />
-                <Carousel title={<h2>Направления</h2>} summaSlides={5} numSlides={4}>
-                    {
-                        cards.map((card, index) => (
-                            <div className="card aling-center" key={index}>
-                                <h4>{card.title}</h4>
-                                <div className="elements">
-                                    {
-                                        card.elements.map((el, index) => (
-                                            <div className="element" key={index}>
-                                                <img src="src/assets/star.png" alt="" />
-                                                <p>{el}</p>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                                <button>пройти пробное занятие</button>
-                            </div>
-                        ))
-                    }
-                </Carousel>
-            </section>
+                    ))
+                }
+            </Carousel>
         </>
     )
 }

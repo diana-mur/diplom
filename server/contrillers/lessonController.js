@@ -71,8 +71,8 @@ export const allCompliteUser = async (req, res) => {
 
 export const findLesson = async (req, res) => {
     const { lessonId } = req.params
-    const lessons = await Lesson.findAll({ where: { id: lessonId } })
-    return res.send({ lessons })
+    const lesson = await Lesson.findOne({ where: { id: lessonId } })
+    return res.send({ lesson })
 }
 
 export const createUserCategories = async (req, res) => {

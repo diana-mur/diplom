@@ -3,8 +3,11 @@ import { jwtDecode } from "jwt-decode"
 import { useSelector } from "react-redux"
 import { Header } from "./components/Header.jsx"
 import { HomePage } from "./pages/HomePage.jsx"
-import { Auth } from "./components/Modals/Auth.jsx"
-import { Reg } from "./components/Modals/Reg.jsx"
+import { Auth } from "./pages/Auth.jsx"
+import { Reg } from "./pages/Reg.jsx"
+import { MainAdmin } from "./pages/Admin/MainAdmin.jsx"
+import { Footer } from "./components/Footer.jsx"
+import Lesson from "./pages/Lesson.jsx"
 
 const router = createBrowserRouter([
     {
@@ -12,6 +15,7 @@ const router = createBrowserRouter([
         element: <>
             <Header />
             <Outlet />
+            <Footer />
         </>,
         children: [
             {
@@ -68,7 +72,7 @@ const userRouter = createBrowserRouter([
             },
             {
                 path: "/lessons/:idLesson/finish",
-                element: <>profile</>
+                element: <>finish</>
             },
         ]
     },
@@ -88,11 +92,11 @@ const adminRouter = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <>MainAdmin</>
+                element: <MainAdmin />
             },
             {
                 path: "/lessons/:idLesson",
-                element: <>idLessonAdmin</>
+                element: <Lesson />
             },
             {
                 path: "/redLesson/:idLesson",
@@ -101,6 +105,14 @@ const adminRouter = createBrowserRouter([
             {
                 path: "/newLesson",
                 element: <>newAdmin</>
+            },
+            {
+                path: "/profile",
+                element: <>profileAdmin</>
+            },
+            {
+                path: "/redProfile",
+                element: <>redProfileAdmin</>
             },
         ]
     },

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { regThunk } from "../../redux/regSlice"
+import { regThunk } from "../redux/regSlice"
 import { useNavigate } from "react-router-dom"
 
 export const Reg = () => {
@@ -27,10 +27,8 @@ export const Reg = () => {
     console.log(regState.error)
     return (
         <div className="container column aling-center">
-            <div className="titles">
-                <h1>Регистрация</h1>
-            </div>
-            <div className="form">
+            <h1 className="mb-8">Регистрация</h1>
+            <div className="flex flex-col sm:w-min mb-5">
                 <input type="text" value={surname} onChange={e => setSurname(e.target.value)} placeholder="Фамилия ребенка" required />
                 <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Имя ребенка" required />
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Ваша эл. почта" required />
@@ -38,7 +36,7 @@ export const Reg = () => {
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Пароль" required />
                 <div className="checkbox">
                     <input type="checkbox" name="checkbox" id="checkbox" checked={checkbox} onChange={handleCheckbox} required />
-                    <label htmlFor="checkbox">Я согласен на обработку моих персональных данных и<br /> персональных данных моего ребенка (опекуна) и согласен с<br /> <a>политикой конфиденциальности</a></label>
+                    <label htmlFor="checkbox">Я согласен на обработку моих персональных данных и персональных данных моего ребенка (опекуна) и согласен с <a className="underline">политикой конфиденциальности</a></label>
                 </div>
                 {
                     !Array.isArray(regState.error) && regState.error && <p style={{ color: "red" }}>{regState.error}</p>
@@ -56,7 +54,7 @@ export const Reg = () => {
             </div>
             {
                 checkbox ?
-                    <button onClick={() => {
+                    <button className="bg-white text-black" onClick={() => {
                         dispatch(regThunk({
                             surname,
                             name,
@@ -66,7 +64,7 @@ export const Reg = () => {
                         }))
                     }}>зарегистрироваться</button>
                     :
-                    <button style={{ backgroundColor: "gray" }} disabled>зарегистрироваться</button>
+                    <button className="bg-gray-600 text-white" disabled>зарегистрироваться</button>
 
             }
         </div>
