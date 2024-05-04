@@ -8,6 +8,9 @@ import { Reg } from "./pages/Reg.jsx"
 import { MainAdmin } from "./pages/Admin/MainAdmin.jsx"
 import { Footer } from "./components/Footer.jsx"
 import Lesson from "./pages/Lesson.jsx"
+import NewLesson from "./pages/Admin/NewLesson.jsx"
+import MainUser from "./pages/User/MainUser.jsx"
+import Quiz from "./pages/User/Quiz.jsx"
 
 const router = createBrowserRouter([
     {
@@ -48,7 +51,7 @@ const userRouter = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <>Home</>
+                element: <MainUser />
             },
             {
                 path: "/profile",
@@ -64,11 +67,11 @@ const userRouter = createBrowserRouter([
             },
             {
                 path: "/lessons/:idLesson",
-                element: <>idLesson</>
+                element: <Lesson />
             },
             {
-                path: "/lessons/:idLesson/test",
-                element: <>test</>
+                path: "/lessons/:idLesson/quiz",
+                element: <Quiz />
             },
             {
                 path: "/lessons/:idLesson/finish",
@@ -104,15 +107,15 @@ const adminRouter = createBrowserRouter([
             },
             {
                 path: "/newLesson",
-                element: <>newAdmin</>
+                element: <NewLesson />
             },
             {
                 path: "/profile",
                 element: <>profileAdmin</>
             },
             {
-                path: "/redProfile",
-                element: <>redProfileAdmin</>
+                path: "/users",
+                element: <>users</>
             },
         ]
     },
@@ -126,7 +129,6 @@ function App() {
     const token = useSelector((state) => state.auth.token)
     let jwt
     token ? jwt = jwtDecode(token) : null
-    console.log(jwt);
 
     return (
         token ?

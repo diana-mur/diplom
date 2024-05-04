@@ -519,7 +519,8 @@ li {
 input[type="text"],
     input[type="email"],
     input[type="date"],
-    input[type="password"] {
+    input[type="password"],
+    select {
   width: 100%;
   background-color: white;
   color: #172C43;
@@ -527,6 +528,28 @@ input[type="text"],
   border-radius: 19px;
   font-size: 16px;
   padding: 15px 19px;
+  margin-bottom: 20px;
+}
+
+input[type='file'] {
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+  position: absolute;
+}
+
+input[type='radio'] {
+  width: 16px;
+  height: 16px;
+  border: none;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 15px 19px;
+  border-radius: 19px;
+  color: #2C435F;
   margin-bottom: 20px;
 }
 
@@ -546,7 +569,8 @@ input[type="text"],
   input[type="text"],
         input[type="email"],
         input[type="date"],
-        input[type="password"] {
+        input[type="password"],
+        select {
     width: 370px;
   }
 }
@@ -726,10 +750,11 @@ input[type="text"],
 }
 
 .star {
-  width: 1em;
-  height: 1em;
-  -webkit-mask-image: url('src/assets/star.svg');
-          mask-image: url('src/assets/star.svg');
+  display: block;
+  width: 24px;
+  height: 24px;
+  -webkit-mask-image: url('../../src/assets/star.svg');
+          mask-image: url('../../src/assets/star.svg');
   /* Путь к SVG файлу со звездой */
   -webkit-mask-size: cover;
           mask-size: cover;
@@ -744,6 +769,10 @@ input[type="text"],
 .partial {
   background: linear-gradient(to right, gold 50%, gray 50%);
   /* Пример для 50% заполнения */
+}
+
+.visible {
+  visibility: visible;
 }
 
 .absolute {
@@ -814,6 +843,10 @@ input[type="text"],
   z-index: 20;
 }
 
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
@@ -840,6 +873,10 @@ input[type="text"],
 
 .mb-0 {
   margin-bottom: 0px;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .mb-14 {
@@ -880,6 +917,10 @@ input[type="text"],
 
 .mr-2 {
   margin-right: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .mt-5 {
@@ -972,6 +1013,10 @@ input[type="text"],
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .resize {
   resize: both;
 }
@@ -996,6 +1041,14 @@ input[type="text"],
   flex-direction: column;
 }
 
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
 .items-center {
   align-items: center;
 }
@@ -1010,6 +1063,10 @@ input[type="text"],
 
 .justify-between {
   justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .gap-2 {
@@ -1040,6 +1097,10 @@ input[type="text"],
   gap: 2%;
 }
 
+.self-start {
+  align-self: flex-start;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1052,6 +1113,10 @@ input[type="text"],
 
 .rounded-2xl {
   border-radius: 1rem;
+}
+
+.rounded-3xl {
+  border-radius: 1.5rem;
 }
 
 .rounded-\[50\%\] {
@@ -1099,13 +1164,18 @@ input[type="text"],
   padding: 1rem;
 }
 
-.p-5 {
-  padding: 1.25rem;
+.p-7 {
+  padding: 1.75rem;
 }
 
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 
 .px-7 {
@@ -1121,6 +1191,11 @@ input[type="text"],
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .py-7 {
@@ -1200,6 +1275,16 @@ input[type="text"],
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
+.text-blue-950 {
+  --tw-text-opacity: 1;
+  color: rgb(23 37 84 / var(--tw-text-opacity));
+}
+
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -1260,6 +1345,10 @@ input[type="text"],
 
   .sm\:min-h-\[80vh\] {
     min-height: 80vh;
+  }
+
+  .sm\:w-\[370px\] {
+    width: 370px;
   }
 
   .sm\:w-auto {
@@ -1360,6 +1449,10 @@ input[type="text"],
     grid-column: span 3 / span 3;
   }
 
+  .lg\:col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+
   .lg\:grid {
     display: grid;
   }
@@ -1374,6 +1467,10 @@ input[type="text"],
 
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-7 {

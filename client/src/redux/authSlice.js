@@ -27,7 +27,6 @@ export const authSlice = createSlice({
         })
         builder.addCase(authThunk.fulfilled, (state, action) => {
             const payload = action.payload
-            console.log(payload.message);
 
             state.message = payload.message
             if (payload.user && payload.token) {

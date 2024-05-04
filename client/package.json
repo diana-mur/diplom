@@ -11,6 +11,7 @@
     "css": "npx tailwindcss -i ./src/styles/input.css -o ./src/styles/output.css --watch"
   },
   "dependencies": {
+    "@observablehq/plot": "^0.6.14",
     "@reduxjs/toolkit": "^2.2.3",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",

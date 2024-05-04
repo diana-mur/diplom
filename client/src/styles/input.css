@@ -70,7 +70,8 @@
     input[type="text"],
     input[type="email"],
     input[type="date"],
-    input[type="password"] {
+    input[type="password"],
+    select {
         width: 100%;
         background-color: white;
         color: #172C43;
@@ -78,6 +79,29 @@
         border-radius: 19px;
         font-size: 16px;
         padding: 15px 19px;
+        margin-bottom: 20px;
+    }
+
+    input[type='file'] {
+        opacity: 0;
+        width: 0.1px;
+        height: 0.1px;
+        position: absolute;
+    }
+
+    input[type='radio'] {
+        width: 16px;
+        height: 16px; 
+        border: none;      
+    }
+
+
+    textarea {
+        width: 100%;
+        height: 100px;
+        padding: 15px 19px;
+        border-radius: 19px;
+        color: #2C435F;
         margin-bottom: 20px;
     }
 
@@ -96,7 +120,8 @@
         input[type="text"],
         input[type="email"],
         input[type="date"],
-        input[type="password"] {
+        input[type="password"],
+        select {
             width: 370px;
         }
     }
@@ -136,9 +161,10 @@
     }
 
     .star {
-        width: 1em;
-        height: 1em;
-        mask-image: url('src/assets/star.svg');
+        display: block;
+        width: 24px;
+        height: 24px;
+        mask-image: url('../../src/assets/star.svg');
         /* Путь к SVG файлу со звездой */
         mask-size: cover;
         background-color: gray;

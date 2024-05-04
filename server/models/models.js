@@ -57,13 +57,9 @@ const Role = sequelize.define('role', {
 });
 
 const LessonComplited = sequelize.define('lessonComplited', {
-    assessment: { type: DataTypes.INTEGER, allowNull: false },
-    prompt: { type: DataTypes.INTEGER },
+    result: { type: DataTypes.INTEGER, allowNull: false },
+    promp: { type: DataTypes.INTEGER },
 });
-
-const Test = sequelize.define('test', {});
-
-const UserCategory = sequelize.define('userCategory', {});
 
 User.hasMany(Comment)
 Comment.belongsTo(User)
@@ -80,17 +76,14 @@ Lesson.belongsTo(Type)
 Category.hasMany(Lesson)
 Lesson.belongsTo(Category)
 
+Lesson.hasMany(Question)
+Question.belongsTo(Lesson)
+
 Role.hasMany(User)
 User.belongsTo(Role)
 
 User.belongsToMany(Lesson, { through: LessonComplited })
 Lesson.belongsToMany(User, { through: LessonComplited })
-
-Question.belongsToMany(Lesson, { through: Test })
-Lesson.belongsToMany(Question, { through: Test })
-
-Category.belongsToMany(User, { through: UserCategory })
-User.belongsToMany(Category, { through: UserCategory })
 
 export default {
     User,
@@ -101,7 +94,5 @@ export default {
     Type,
     Category,
     Role,
-    LessonComplited,
-    Test,
-    UserCategory
+    LessonComplited
 }

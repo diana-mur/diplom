@@ -3,15 +3,45 @@ import models from "../models/models.js";
 
 const Lesson = models.Lesson
 const LessonComplited = models.LessonComplited
-const UserCategory = models.UserCategory
+const Category = models.Category
+const Type = models.Type
 
+// все занятия по категориям
 export const allLessons = async (req, res) => {
-    const lessons = await Lesson.findAll()
-    return res.send({ lessons })
+    try {
+        const categories = await Category.findAll()
+        let filteredLessons = []
+        for (let index = 0; index < categories.length; index++) {
+            const lessons = await Lesson.findAll({ where: { categoryId: categories[index].id } });
+            filteredLessons.push({ name: [categories[index].id], lessons });
+        }
+        return res.send({ filteredLessons })
+    } catch (error) {
+        console.error('Error fetching lessons:', error)
+        return res.status(500).send({ message: 'Internal Server Error' })
+    }
 }
 
+// категории
+export const categories = async (req, res) => {
+    const categories = await Category.findAll()
+    return res.send({ categories })
+}
+
+// типы уроков
+export const types = async (req, res) => {
+    const types = await Type.findAll()
+    return res.send({ types })
+}
+
+// создать занятие
 export const createLesson = async (req, res) => {
-    const { name, content, video, ageUnder, ageUp, image, typeId, categoryId } = req.body
+    const { name, content, ageUnder, ageUp, typeId, categoryId } = req.body
+    console.log(req.files, name, content, ageUnder, ageUp, typeId, categoryId);
+    const image = req.files['image'] ? req.files['image'][0].filename : null
+    const video = req.files['video'] ? req.files['video'][0].filename : null
+
+
     if (!name || !ageUnder || !ageUp || !typeId || !categoryId) return res.send({ message: "Все поля должны быть заполнены" })
     const lesson = await Lesson.create({
         name, content, video, ageUnder, ageUp, image, invite: '0', typeId, categoryId
@@ -19,6 +49,7 @@ export const createLesson = async (req, res) => {
     return res.send({ lesson })
 }
 
+// изменить занятие
 export const changeLesson = async (req, res) => {
     const { id, name, content, video, ageUnder, ageUp, image, invite, typeId, categoryId } = req.body;
 
@@ -42,14 +73,30 @@ export const changeLesson = async (req, res) => {
     return res.send({ lesson });
 }
 
+// создать пройденное занятие с результатами
 export const createLC = async (req, res) => {
-    const { assessment, prompt, lessonId, userId } = req.body
-    const LC = await LessonComplited.create({
-        assessment, prompt, lessonId, userId
+    const { result, promp, lessonId, userId } = req.body
+
+    const unique = await LessonComplited.findOne({
+        where: { lessonId, userId }
     })
-    return res.send({ LC })
+
+    if (unique) {
+        const updateResult = await LessonComplited.update({
+            result
+        }, {
+            where: { lessonId, userId }
+        })
+        return res.send({ updateResult })
+    } else {
+        const LC = await LessonComplited.create({
+            result, promp, lessonId, userId
+        })
+        return res.send({ LC })
+    }
 }
 
+// все оконченные занятия определенного пользователя
 export const allCompliteUser = async (req, res) => {
     const { userId } = req.params
     const LC = await LessonComplited.findAll({
@@ -69,51 +116,21 @@ export const allCompliteUser = async (req, res) => {
     return res.send({ lessons })
 }
 
+// все записи по определенному оконченному занятию
+export const resultsLesson = async (req, res) => {
+    const { lessonId } = req.params
+    const lessons = await LessonComplited.findAll({ where: { lessonId } })
+    return res.send({ lessons })
+}
+
+// найти урок
 export const findLesson = async (req, res) => {
     const { lessonId } = req.params
     const lesson = await Lesson.findOne({ where: { id: lessonId } })
     return res.send({ lesson })
 }
 
-export const createUserCategories = async (req, res) => {
-    const { userId, categoryIds } = req.body
-    for (let i = 0; i < categoryIds.length; i++) {
-        const category = await UserCategory.create({
-            categoryId: categoryIds[i].categoryId,
-            userId
-        })
-    }
-    return res.send({ categoryIds })
-}
-
-export const lessonsForUser = async (req, res) => {
-    const { userId } = req.params
-
-    const userCategories = await UserCategory.findAll({
-        where: { userId },
-        attributes: ['categoryId']
-    })
-    const categoryIds = userCategories.map(item => item.categoryId)
-
-    const LC = await LessonComplited.findAll({
-        where: { userId },
-        attributes: ['lessonId']
-    })
-    const lessonIds = LC.map(item => item.lessonId)
-
-    const lessons = await Lesson.findAll({
-        where: {
-            id: {
-                [Op.not]: lessonIds
-            },
-            categoryId: {
-                [Op.in]: categoryIds
-            }
-        }
-    })
-    return res.send({ lessons })
-}
-
+// удалить занятие
 export const deleteLesson = async (req, res) => {
     const { lessonId } = req.params
 

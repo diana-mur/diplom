@@ -11,12 +11,13 @@ import testRouter from "./routes/testRouter.js";
 const app = express()
 const PORT = process.env.PORT
 
-app.use(express.json())
 app.use(cors())
+app.use(express.json())
 app.use('/api/users', userRouter)
 app.use('/api/comments', commentRouter)
 app.use('/api/lessons', lessonRouter)
 app.use('/api/tests', testRouter)
+app.use(express.static('public'))
 
 const start = async () => {
     await sequelize.authenticate()

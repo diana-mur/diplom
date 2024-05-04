@@ -5,9 +5,9 @@ import { allComments, changeStatus, commentsForFilter, createComment, deleteComm
 const commentRouter = express.Router()
 
 commentRouter.post('/create', createComment)
-commentRouter.post('/changeStatus', CheckRoleMiddleware('ADMIN'), changeStatus)
-commentRouter.get('/allForLesson/:lessonId', allComments)
-commentRouter.get('/filter', CheckRoleMiddleware('ADMIN'), commentsForFilter)
-commentRouter.get('/delete/:commentId', deleteComment)
+commentRouter.post('/changeStatus', CheckRoleMiddleware(['ADMIN']), changeStatus)
+commentRouter.get('/allForLesson/:lessonId', CheckRoleMiddleware(['ADMIN', 'USER']), allComments)
+commentRouter.get('/filter', CheckRoleMiddleware(['ADMIN','USER']), commentsForFilter)
+commentRouter.get('/delete/:commentId', CheckRoleMiddleware(['ADMIN']), deleteComment)
 
 export default commentRouter

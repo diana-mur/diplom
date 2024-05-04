@@ -1,36 +1,23 @@
 import { useEffect, useState } from "react"
-import { Title } from "../../components/Title"
-import { MainCardLesson } from "../../components/mainCardLesson"
-import plus from "../../assets/plus.png"
-import { useNavigate } from "react-router-dom"
-import Comment from "../../components/Comment"
 import { get } from "../../hooks/fetchForm"
 import { useDispatch, useSelector } from "react-redux"
+import { Title } from "../../components/Title"
+import { MainCardLesson } from "../../components/mainCardLesson"
 
-export const MainAdmin = () => {
+export default function MainUser() {
     const [cards, setCards] = useState([])
-    const [comments, setComments] = useState([])
-
-    const navigate = useNavigate()
     const dispatch = useDispatch()
-
     const token = useSelector(state => state.auth.token)
 
     useEffect(() => {
         get({ url: 'lessons/all', dispatch, token })
             .then(json => setCards(json.filteredLessons))
-        get({ url: 'comments/filter', dispatch, token })
-            .then(json => setComments(json.comments))
-    }, [token])
+    }, [])
 
     return (
         <>
-            <div className="container" key={1}>
-                <Title type={2} title={"Занятия"}>
-                    <button className="bg-blue-300" onClick={() => navigate(`../newLesson`)}>
-                        создать
-                    </button>
-                </Title>
+            <div className="container">
+                <Title type={1} title={"Занятия"} />
                 {
                     cards?.map((category, index) => (
                         <div className="" key={index}>
@@ -47,21 +34,11 @@ export const MainAdmin = () => {
                                             numInvite={card.invite}
                                             ageUnder={card.ageUnder}
                                             ageUp={card.ageUp}
-                                            visible={true} />
+                                            visible={false} />
                                     ))
                                 }
-                            </div >
+                            </div>
                         </div>
-                    ))
-
-                }
-
-            </div>
-            <div className="container" key={2}>
-                <Title type={1} title={'Модерация отзывов'} />
-                {
-                    comments?.map((comm) => (
-                        <Comment type={1} key={comm.id} commentId={comm.id} lessonId={comm.lessonId} userId={comm.userId} rating={comm.value} text={comm.text} comments={comments} setComments={setComments} />
                     ))
                 }
             </div>

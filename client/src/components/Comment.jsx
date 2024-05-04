@@ -1,40 +1,29 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import StarRating from "./starRating"
 import { useEffect, useState } from "react"
+import { get, post } from "../hooks/fetchForm"
 
-export default function Comment({ commentId, type, lessonId, userId, rating, text, comments, setComments }) {
+export default function Comment({ type, token, dispatch, commentId, lessonId, userId, rating, text, comments, setComments }) {
     const [nameLesson, setNameLesson] = useState('')
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
 
-    const token = useSelector((state) => state.auth.token)
-
     useEffect(() => {
-        fetch(`http://localhost:8080/api/lessons/findLesson/${lessonId}`)
-            .then(data => data.json())
+        get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
             .then(json => setNameLesson(json.lesson.name));
-
-        fetch(`http://localhost:8080/api/users/find/${userId}`)
-            .then(data => data.json())
+        get({ url: `users/find/${userId}`, dispatch, token })
             .then(json => {
                 setName(json.user.name);
                 setSurname(json.user.surname)
             })
     }, [])
 
-
     function handleStatusChange(statusId) {
-        fetch(`http://localhost:8080/api/comments/changeStatus`, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
+        post({
+            url: `comments/changeStatus`, dispatch, token, data: {
                 commentId,
                 statusId
-            })
+            }
         })
         setComments(comments.filter(comm => comm.id != commentId))
     }
@@ -59,8 +48,10 @@ export default function Comment({ commentId, type, lessonId, userId, rating, tex
     }
     if (type == 2) {
         return (
-            <div className="grid">
-
+            <div className="flex flex-col gap-7 blue box-shadow rounded-2xl p-4 sm:grid sm:gap-0 sm:items-center sm:grid-cols-4 lg:grid-cols-6">
+                <h6 className="col-span-1">{name} {surname}</h6>
+                <StarRating rating={rating} />
+                <p className="col-span-2 lg:col-span-4">{text}</p>
             </div>
         )
     }

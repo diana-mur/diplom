@@ -3,6 +3,7 @@ import models from "../models/models.js";
 
 const Comment = models.Comment
 
+// новый комментарий
 export const createComment = async (req, res) => {
     const { userId, lessonId, value, text } = req.body
     if (!userId || !lessonId || !value || !text) return res.send({ message: "Все поля должны быть заполнены" })
@@ -12,6 +13,7 @@ export const createComment = async (req, res) => {
     return res.send({ comment })
 }
 
+// изменение статуса комментария
 export const changeStatus = async (req, res) => {
     const { commentId, statusId } = req.body
     const comment = await Comment.findOne({
@@ -22,6 +24,7 @@ export const changeStatus = async (req, res) => {
     return res.send({ comment })
 }
 
+// комментарии для занятия
 export const allComments = async (req, res) => {
     const { lessonId } = req.params
     const comments = await Comment.findAll({
@@ -32,6 +35,7 @@ export const allComments = async (req, res) => {
     return res.send({ comments })
 }
 
+// комментарии для фильтра
 export const commentsForFilter = async (req, res) => {
     const comments = await Comment.findAll({
         where: { statusId: 'В обработке' }
@@ -39,6 +43,7 @@ export const commentsForFilter = async (req, res) => {
     return res.send({ comments })
 }
 
+// удаление комментария
 export const deleteComment = async (req, res) => {
     const { commentId } = req.params
 
