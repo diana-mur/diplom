@@ -26,7 +26,6 @@ export const createTest = async (req, res) => {
                 image: req.files[i].filename || null,
                 lessonId
             });
-            console.log(questionData);
         }
 
         return res.status(200).json({ message: "Вопросы успешно созданы" });
@@ -48,6 +47,7 @@ export const allQuestions = async (req, res) => {
     return res.send({ questions })
 }
 
+// подсказка на вопрос по его ид
 export const clueForQuestion = async (req, res) => {
     const { id } = req.params
 
@@ -56,5 +56,35 @@ export const clueForQuestion = async (req, res) => {
         attributes: ['clue']
     })
 
-    return res.send({ clue })
+    console.log(clue);
+
+    return res.send({ clue: clue.clue })
 }
+
+// проверка правильности ответов
+export const checkAnswer = async (req, res) => {
+    const { answers } = req.body;
+
+    if (!answers || !Array.isArray(answers) || answers?.length < 1) {
+        return res.status(400).json({ message: "Нет входящего массива с ответами или он пустой" });
+    }
+
+    let correct = 0
+
+    try {
+        for (let i = 0; i < answers.length; i++) {
+            const answer = answers[i];
+            const check = await Question.findOne({
+                where: { id: answer.id }
+            });
+            if (answer.answer == check.correct) {
+                correct += 1
+            }
+        }
+
+        return res.status(200).json({ correct });
+    } catch (error) {
+        console.error("Ошибка при проверке ответов:", error);
+        return res.status(500).json({ message: "Произошла ошибка при проверке ответов" });
+    }
+};

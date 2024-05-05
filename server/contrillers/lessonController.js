@@ -123,6 +123,13 @@ export const resultsLesson = async (req, res) => {
     return res.send({ lessons })
 }
 
+// все записи по определенному оконченному занятию
+export const resultLesson = async (req, res) => {
+    const { lessonId, userId } = req.params
+    const result = await LessonComplited.findOne({ where: { lessonId, userId } })
+    return res.send({ result })
+}
+
 // найти урок
 export const findLesson = async (req, res) => {
     const { lessonId } = req.params

@@ -1,6 +1,6 @@
 import express from "express";
 import { CheckRoleMiddleware } from "../middleware/RoleMw.js";
-import { allLessons, changeLesson, createLC, createLesson, deleteLesson, allCompliteUser, findLesson, resultsLesson, categories, types } from "../contrillers/lessonController.js";
+import { allLessons, changeLesson, createLC, createLesson, deleteLesson, allCompliteUser, findLesson, resultsLesson, categories, types, resultLesson } from "../contrillers/lessonController.js";
 import { upload } from "../loadingFiles/loadingFile.js";
 
 const lessonRouter = express.Router()
@@ -13,9 +13,8 @@ lessonRouter.post('/change', CheckRoleMiddleware(['ADMIN']), changeLesson)
 lessonRouter.post('/createComplite', CheckRoleMiddleware(['USER']), createLC)
 lessonRouter.get('/allCompliteUser/:userId', CheckRoleMiddleware(['USER']), allCompliteUser)
 lessonRouter.get('/resultsLesson/:lessonId', CheckRoleMiddleware(['ADMIN', 'USER']), resultsLesson)
+lessonRouter.get('/result/:lessonId/:userId', CheckRoleMiddleware(['ADMIN', 'USER']), resultLesson)
 lessonRouter.get('/findLesson/:lessonId', CheckRoleMiddleware(['ADMIN', 'USER']), findLesson)
-// lessonRouter.post('/addUserCategories', createUserCategories)
-// lessonRouter.get('/lessonsForUser/:userId', lessonsForUser)
 lessonRouter.get('/delete/:lessonId', CheckRoleMiddleware(['ADMIN']), deleteLesson)
 
 export default lessonRouter

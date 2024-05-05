@@ -28,7 +28,7 @@ export const Title = ({ type, position, title, onClick, children }) => {
     }
     if (type == '4') {
         return (
-            <div className={`flex mb-5 ${position}`} onClick={onClick}>
+            <div className={`flex mb-2 ${position}`} onClick={onClick}>
                 <h4>{title}</h4>
                 {children}
             </div>

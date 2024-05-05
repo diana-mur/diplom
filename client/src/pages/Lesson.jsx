@@ -8,56 +8,42 @@ import Chart from "../components/Chart"
 import { get, post } from "../hooks/fetchForm"
 import HandleRating from "../components/handleRating"
 import Comment from "../components/Comment"
+import { InputComment } from "../components/inputComment"
 
 export default function Lesson() {
     const [data, setData] = useState('')
     const [comments, setComments] = useState([])
     const [complete, setComplite] = useState(false)
-    const [commenting, setCommenting] = useState(false)
-    const [compliteFilter, setCompliteFilter] = useState(false)
     const [results, setResults] = useState([])
     const [textComment, setTextComment] = useState('')
     const [userRating, setUserRating] = useState(0)
 
-    const dispatch = useDispatch()
-
-    const id = useSelector(state => state.auth.id)
     const token = useSelector(state => state.auth.token)
+    const dispatch = useDispatch()
     const navigate = useNavigate()
-    const location = useLocation()
-    const lessonId = location.pathname.split('/')[2]
+    const loc = useLocation()
+    const lessonId = loc.pathname.split('/')[2]
 
     let jwt
     token ? jwt = jwtDecode(token) : null
+    const id = jwt?.id
 
     useEffect(() => {
         get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
             .then(json => setData(json.lesson));
         get({ url: `comments/allForLesson/${lessonId}`, dispatch, token })
-            .then(json => {
-                const isComment = json?.comments.some(com => com.userId == id);
-                setCommenting(isComment);
-                setComments(json.comments)
-            })
-        get({ url: `comments/filter`, dispatch, token })
-            .then(json => {
-                const isCommentFilter = json?.comments.some(com => com.userId == id);
-                setCompliteFilter(isCommentFilter)
-            })
-        get({ url: `lessons/allCompliteUser/${id}`, dispatch, token })
-            .then(json => {
-                const isComplite = json?.lessons.some(les => les.id == lessonId);
-                setComplite(isComplite)
-            })
+            .then(json => setComments(json.comments))
         get({ url: `lessons/resultsLesson/${lessonId}`, dispatch, token })
             .then(json => setResults(json.lessons))
 
     }, [])
 
     let sumRating = 0
+
     for (let index = 0; index < comments.length; index++) {
         sumRating += Number(comments[index].value)
     }
+
     const rating = sumRating / comments.length
 
     const handleButtonPostComment = () => {
@@ -88,23 +74,26 @@ export default function Lesson() {
                     </div>
                     <p>{data.content}</p>
                 </div>
-                <p>Форма пробного урока: {data.typeId}</p>
+                <p className="mb-3">Форма пробного урока: {data.typeId}</p>
                 {
                     jwt?.roleId == "USER" &&
                     <div className="flex">
-                        <button className="bg-blue-300 ml-auto" onClick={() => navigate(`quiz`)}>{complete ? "пройти повторно" : "начать"}</button>
+                        <button className="bg-blue-300 ml-auto" onClick={() => navigate(`../../lessons/${lessonId}/quiz`)}>{complete ? "пройти повторно" : "начать"}</button>
                     </div>
                 }
             </div>
-            {
-                complete && !commenting && !compliteFilter &&
-                <div className="container">
-                    <Title type={3} title={'Ваша оценка'} />
-                    <HandleRating onRatingChange={setUserRating} />
-                    <textarea type="text" value={textComment} onChange={e => setTextComment(e.target.value)} className="mb-5" placeholder="Текст отзыва" required />
-                    <button className="bg-white text-black" onClick={handleButtonPostComment}>отправить</button>
-                </div>
-            }
+            <InputComment
+                setUserRating={setUserRating}
+                textComment={textComment}
+                setTextComment={setTextComment}
+                handleButtonPostComment={handleButtonPostComment}
+                styleButton={"bg-white text-black"}
+                id={id}
+                lessonId={lessonId}
+                dispatch={dispatch}
+                token={token}
+                setComplite={setComplite}
+            />
             {
                 jwt?.roleId == "ADMIN" &&
                 <div className="container">

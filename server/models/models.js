@@ -58,7 +58,7 @@ const Role = sequelize.define('role', {
 
 const LessonComplited = sequelize.define('lessonComplited', {
     result: { type: DataTypes.INTEGER, allowNull: false },
-    promp: { type: DataTypes.INTEGER },
+    promp: { type: DataTypes.INTEGER, allowNull: false },
 });
 
 User.hasMany(Comment)
