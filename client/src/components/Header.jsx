@@ -11,7 +11,7 @@ export const Header = () => {
 
     return (
         <header className="flex justify-between container my-3">
-            <Link to={'/'} className="aling-middle font-['Aqum_Two'] font-small-caps mr-10"><h4>ДетиВДеле</h4></Link>
+            <Link to={'/'} className="aling-middle font-['Aqum_Two'] font-small-caps"><h4>ДетиВДеле</h4></Link>
             <div className="flex gap-5 items-center">
                 {
                     jwt?.roleId == 'ADMIN' &&  <Link to={'../../users'}>пользователи</Link>

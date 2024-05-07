@@ -88,3 +88,37 @@ export const checkAnswer = async (req, res) => {
         return res.status(500).json({ message: "Произошла ошибка при проверке ответов" });
     }
 };
+
+// обновление вопросов теста
+export const updateTest = async (req, res) => {
+    const { lessonId } = req.body;
+    const questions = req.body.questions; // Теперь это массив объектов вопросов
+
+    if (!questions || !Array.isArray(questions)) {
+        return res.status(400).json({ message: "Нет входящего массива с вопросами" });
+    }
+
+    await Question.destroy({ where: { lessonId } })
+
+    try {
+        for (let i = 0; i < questions.length; i++) {
+            const questionData = questions[i];
+            const question = await Question.create({
+                question: questionData.question,
+                v1: questionData.v1,
+                v2: questionData.v2,
+                v3: questionData.v3 || null,
+                v4: questionData.v4 || null,
+                correct: questionData.correct,
+                clue: questionData.clue,
+                image: req.files[i].filename || null,
+                lessonId
+            });
+        }
+
+        return res.status(200).json({ message: "Вопросы успешно изменены" });
+    } catch (error) {
+        console.error("Ошибка при изменении вопросов:", error);
+        return res.status(500).json({ message: "Произошла ошибка при изменении вопросов" });
+    }
+};

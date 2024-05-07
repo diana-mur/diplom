@@ -9,5 +9,6 @@ testRouter.post('/create', upload.any(), createTest)
 testRouter.get('/all/:lessonId', CheckRoleMiddleware(['ADMIN', 'USER']), allQuestions)
 testRouter.get('/clue/:id', CheckRoleMiddleware(['ADMIN', 'USER']), clueForQuestion)
 testRouter.post('/check', CheckRoleMiddleware(['ADMIN', 'USER']), checkAnswer)
+testRouter.post('/update', upload.any(), checkAnswer)
 
 export default testRouter

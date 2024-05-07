@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import models from "../models/models.js"
 import { generateAccessToken } from "../generateToken/generateToken.js"
 import { validationResult } from "express-validator"
+import { Op } from "sequelize"
 
 const User = models.User
 
@@ -59,14 +60,47 @@ export const allUsers = async (req, res) => {
 
 // изменение пользователя
 export const changeUser = async (req, res) => {
-    const { id, surname, name, email, password } = req.body
-    if (!id || !surname || !name || !email || !password) return res.send({ message: "Все поля должны быть заполнены" })
+    const { id, surname, name, email } = req.body
+
+    if (!id || !surname || !name || !email) return res.send({ message: "Все поля должны быть заполнены" })
+
     const user = await User.findOne({ where: { id } })
+
     if (!user) return res.send({ message: "Пользователь не найден" })
-    user.update({
-        surname, name, email, password
+
+    const uniqueEmail = await User.findOne({
+        where: {
+            email,
+            id: { [Op.ne]: id }
+        }
     })
-    return res.send({ user })
+
+    if (!uniqueEmail) {
+        await user.update({ surname, name, email })
+
+        return res.send({ message: "Данные успешно обновлены" })
+    } else {
+        return res.send({ message: "Данная электронная почта уже занята" })
+    }
+}
+
+// смена пароля
+export const changePassword = async (req, res) => {
+    const { id, prevPassword, newPassword } = req.body
+
+    const user = await User.findOne({ where: { id } })
+
+    if (!user) return res.send({ message: 'Пользователь не найден' })
+
+    const isValidPassword = bcrypt.compareSync(prevPassword, user.password)
+
+    if (!isValidPassword) return res.send({ message: 'Неверный пароль' })
+
+    const changePassword = bcrypt.hashSync(newPassword, 10)
+
+    const updateUser = await user.update({ password: changePassword })
+
+    return res.send({ message: 'Пароль обновлен' })
 }
 
 // удаление пользователя
@@ -75,5 +109,5 @@ export const deleteUser = async (req, res) => {
     const user = await User.findOne({ where: { id: userId } })
     if (!user) return res.send({ message: "Пользователь не найден" })
     await user.destroy()
-    return res.send({ user })
+    return res.send({ message: 'Пользователь удален' })
 }

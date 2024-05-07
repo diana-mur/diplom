@@ -1,9 +1,8 @@
-import { useDispatch, useSelector } from "react-redux"
 import StarRating from "./starRating"
 import { useEffect, useState } from "react"
 import { get, post } from "../hooks/fetchForm"
 
-export default function Comment({ type, token, dispatch, commentId, lessonId, userId, rating, text, comments, setComments }) {
+export default function Comment({ type, token, dispatch, commentId, statusId, lessonId, userId, rating, text, comments, setComments }) {
     const [nameLesson, setNameLesson] = useState('')
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
@@ -11,12 +10,14 @@ export default function Comment({ type, token, dispatch, commentId, lessonId, us
     useEffect(() => {
         get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
             .then(json => setNameLesson(json.lesson.name));
-        get({ url: `users/find/${userId}`, dispatch, token })
-            .then(json => {
-                setName(json.user.name);
-                setSurname(json.user.surname)
-            })
-    }, [])
+        if (userId) {
+            get({ url: `users/find/${userId}`, dispatch, token })
+                .then(json => {
+                    setName(json.user.name);
+                    setSurname(json.user.surname)
+                })
+        }
+    }, [token])
 
     function handleStatusChange(statusId) {
         post({
@@ -25,6 +26,11 @@ export default function Comment({ type, token, dispatch, commentId, lessonId, us
                 statusId
             }
         })
+        setComments(comments.filter(comm => comm.id != commentId))
+    }
+
+    function deleteComment() {
+        get({ url: `comments/delete/${commentId}`, dispatch, token })
         setComments(comments.filter(comm => comm.id != commentId))
     }
 
@@ -57,15 +63,22 @@ export default function Comment({ type, token, dispatch, commentId, lessonId, us
     }
     if (type == 3) {
         return (
-            <div className="grid">
-
+            <div className="flex flex-col gap-7 blue box-shadow rounded-2xl p-4 sm:grid sm:gap-0 sm:items-center sm:grid-cols-5 lg:grid-cols-7">
+                <h6 className="col-span-1">{name} {surname}</h6>
+                <StarRating rating={rating} />
+                <p className="col-span-2 lg:col-span-4">{text}</p>
+                <button className="bg-red-400" onClick={deleteComment}>удалить</button>
             </div>
         )
     }
     if (type == 4) {
         return (
-            <div className="grid">
-
+            <div className="flex flex-col gap-7 blue box-shadow rounded-2xl p-4 sm:grid sm:gap-0 sm:items-center sm:grid-cols-6 lg:grid-cols-7">
+                <h6 className="col-span-1">{nameLesson}</h6>
+                <h6 className="col-span-1">{statusId}</h6>
+                <StarRating rating={rating} />
+                <p className="col-span-2 lg:col-span-3">{text}</p>
+                <button className="bg-red-400" onClick={deleteComment}>удалить</button>
             </div>
         )
     }

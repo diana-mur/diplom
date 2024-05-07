@@ -1,10 +1,14 @@
-import { useState } from "react"
 import { Carousel } from "../components/Carousel/Carousel"
 import { MainImage } from "../components/MainImage"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Title } from "../components/Title"
 import useWindowSize from "../hooks/windowSize"
+import photo1 from "../assets/photo1.png"
+import photo2 from "../assets/photo2.png"
+import photo3 from "../assets/photo3.png"
+import photo4 from "../assets/photo4.png"
+import photo5 from "../assets/photo5.png"
 
 export const HomePage = () => {
     const token = useSelector((state) => state.auth.token)
@@ -87,22 +91,22 @@ export const HomePage = () => {
                 <Title type={1} position={'text-center'} title={'Кто мы?'} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                     <div className="rounded-xl overflow-hidden box-shadow">
-                        <img src="src/assets/photo2.png" alt="" />
+                        <img src={photo1} alt="" />
                     </div>
                     <div className="rounded-lg overflow-hidden box-shadow blue flex justify-center items-center p-3">
                         <p className="text-center leading-5 text-xs  lg:text-xl">Управление по культуре и искусству администрации города Оренбурга <span className="font-semibold">запустило проект для детей Оренбуржья, который поможет им</span> раскрыть свои таланты и развить навыки</p>
                     </div>
                     <div className="rounded-lg overflow-hidden box-shadow">
-                        <img src="src/assets/photo2.png" alt="" />
+                        <img src={photo2} alt="" />
                     </div>
                     <div className="rounded-lg overflow-hidden box-shadow hidden sm:block">
-                        <img src="src/assets/photo2.png" alt="" />
+                        <img src={photo3} alt="" />
                     </div>
                     <div className="rounded-lg overflow-hidden box-shadow hidden md:block">
-                        <img src="src/assets/photo2.png" alt="" />
+                        <img src={photo4} alt="" />
                     </div>
                     <div className="rounded-lg overflow-hidden box-shadow hidden md:block">
-                        <img src="src/assets/photo2.png" alt="" />
+                        <img src={photo5} alt="" />
                     </div>
                 </div>
             </div>

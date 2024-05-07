@@ -8,6 +8,7 @@
     h2,
     h3,
     h4,
+    th,
     button {
         font-family: "Aqum Two", sans-serif;
         font-variant: small-caps;
@@ -91,10 +92,34 @@
 
     input[type='radio'] {
         width: 16px;
-        height: 16px; 
-        border: none;      
+        height: 16px;
+        border: none;
     }
 
+    table {
+        width: 100%;
+        border-radius: 19px;
+        overflow: hidden;
+    }
+
+    thead {
+        background-color: #2C435F;
+    }
+
+    th {
+        @apply text-xl;
+        color: white;
+        background-color: #2C435F;
+        text-align: start;
+        padding: 10px;
+    }
+
+    td {
+        color: #2C435F;
+        background-color: white;
+        border-bottom: 1px solid #2C435F;
+        padding: 5px 10px;
+    }
 
     textarea {
         width: 100%;

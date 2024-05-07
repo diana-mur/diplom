@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { Title } from "../../components/Title"
 import { MainCardLesson } from "../../components/mainCardLesson"
-import plus from "../../assets/plus.png"
-import { useNavigate } from "react-router-dom"
 import Comment from "../../components/Comment"
 import { get } from "../../hooks/fetchForm"
-import { useDispatch, useSelector } from "react-redux"
 
 export const MainAdmin = () => {
     const [cards, setCards] = useState([])
@@ -14,7 +13,7 @@ export const MainAdmin = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const token = useSelector(state => state.auth.token)
+    const token = useSelector((state) => state.auth.token)
 
     useEffect(() => {
         get({ url: 'lessons/all', dispatch, token })
@@ -50,18 +49,26 @@ export const MainAdmin = () => {
                                             visible={true} />
                                     ))
                                 }
-                            </div >
+                            </div>
                         </div>
                     ))
-
                 }
-
             </div>
             <div className="container" key={2}>
                 <Title type={1} title={'Модерация отзывов'} />
                 {
                     comments?.map((comm) => (
-                        <Comment type={1} key={comm.id} commentId={comm.id} lessonId={comm.lessonId} userId={comm.userId} rating={comm.value} text={comm.text} comments={comments} setComments={setComments} />
+                        <Comment 
+                        type={1} 
+                        token={token}
+                        key={comm.id} 
+                        commentId={comm.id} 
+                        lessonId={comm.lessonId} 
+                        userId={comm.userId} 
+                        rating={comm.value} 
+                        text={comm.text} 
+                        comments={comments} 
+                        setComments={setComments} />
                     ))
                 }
             </div>

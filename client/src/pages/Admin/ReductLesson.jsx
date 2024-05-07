@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react"
-import { Title } from "../../components/Title"
-import { get } from "../../hooks/fetchForm"
 import { useDispatch, useSelector } from "react-redux"
-import { InputFile } from "../../components/inputFile"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { get } from "../../hooks/fetchForm"
 
-function NewLesson() {
+export default function ReductLesson() {
     const [categories, setCategories] = useState([])
     const [types, setTypes] = useState([])
     const [dataList, setDataList] = useState([])
@@ -16,32 +14,43 @@ function NewLesson() {
     const [ageUp, setAgeUp] = useState('')
     const [image, setImage] = useState(null)
     const [video, setVideo] = useState(null)
-    const [lessonType, setLessonType] = useState('тест')
+    const [videoBlob, setVideoBlob] = useState(null)
+    const [lessonType, setLessonType] = useState('')
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const loc = useLocation()
 
     const token = useSelector(state => state.auth.token)
+    const lessonId = loc.pathname.split('/')[2]
 
     useEffect(() => {
+        get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
+            .then(data => {
+                setNameLesson(data.lesson.name);
+                setContent(data.lesson.content);
+                setAgeUnder(data.lesson.ageUnder);
+                setAgeUp(data.lesson.ageUp);
+                setImage(data.lesson.image);
+                setVideo(data.lesson.video);
+                setLessonType(data.lesson.typeId);
+                setCategory(data.lesson.categoryId);
+            })
         get({ url: `lessons/categories`, dispatch, token })
             .then(json => {
                 setCategories(json.categories);
-                setCategory(json.categories[0].id)
             })
-        get({ url: `lessons/types`, dispatch, token })
-            .then(json => setTypes(json.types))
     }, [token])
 
     const handleClick = (id) => {
         document.getElementById(id).click()
     }
 
-    const handleClickDelete = (index) => {
-        setDataList(prev => prev.filter((item, i) => i != index))
-    }
-
     const handleAddClick = () => {
         setDataList(prev => [...prev, { question: '', v1: '', v2: '', v3: '', v4: '', correct: '', clue: '', image: null }])
+    }
+
+    const handleClickDelete = (index) => {
+        setDataList(prev => prev.filter((item, i) => i != index))
     }
 
     const handleChangeData = (e, index, field) => {
@@ -82,7 +91,7 @@ function NewLesson() {
         formdata.append('categoryId', category)
         if (lessonType == 'видео-урок') formdata.append('video', video)
 
-        const response = await fetch('http://localhost:8080/api/lessons/create', {
+        const response = await fetch('http://localhost:8080/api/lessons/change', {
             method: "POST",
             body: formdata
         }).then(data => data.json())
@@ -111,16 +120,18 @@ function NewLesson() {
             console.log(response2);
         }
 
-        alert('занятие успешно создано')
+        alert('занятие успешно обновлено')
         navigate(`../../lessons/${response.lesson.id}`)
     }
 
     console.log(dataList);
 
-    return (
+    if (lessonType == 'видео-урок') return
+
+    if (lessonType == 'тест') return (
         <>
             <div className="container">
-                <Title type={1} title={'Создание занятия'} />
+                <Title type={1} title={'Редактирование занятия'} />
                 <input type="text" placeholder="Название" value={nameLesson} onChange={e => setNameLesson(e.target.value)} />
                 <textarea name="" id="" cols="30" rows="10" placeholder="Описание" value={content} onChange={e => setContent(e.target.value)} />
                 <select value={category} onChange={e => setCategory(e.target.value)} name="" id="">
@@ -209,5 +220,3 @@ function NewLesson() {
         </>
     )
 }
-
-export default NewLesson

@@ -32,12 +32,11 @@ export const InputComment = ({
             })
         get({ url: `lessons/allCompliteUser/${id}`, dispatch, token })
             .then(json => {
-                const isComplite = json?.lessons.some(les => les.id == lessonId);
+                const isComplite = json?.lessons.some(les => les.lessonId == lessonId);
                 setCompl(isComplite)
                 setComplite(isComplite)
             })
     }, [token])
-
 
     return (
         compl && !commenting && !compliteFilter &&

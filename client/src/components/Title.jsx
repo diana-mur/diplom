@@ -10,7 +10,7 @@ export const Title = ({ type, position, title, onClick, children }) => {
     if (type == '2') {
         return (
             <div className="flex justify-between items-center mb-5" onClick={onClick}>
-                <div className="flex gap-5 items-center">
+                <div className="sm:flex gap-5 items-center">
                     <h2 className="mb-5">{title}</h2>
                     {children}
                 </div>

@@ -35,6 +35,15 @@ export const allComments = async (req, res) => {
     return res.send({ comments })
 }
 
+// все комментарии одного пользователя
+export const userComments = async (req, res) => {
+    const { userId } = req.params
+    const comments = await Comment.findAll({
+        where: { userId }
+    })
+    return res.send({ comments })
+}
+
 // комментарии для фильтра
 export const commentsForFilter = async (req, res) => {
     const comments = await Comment.findAll({

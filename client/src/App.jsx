@@ -12,6 +12,10 @@ import NewLesson from "./pages/Admin/NewLesson.jsx"
 import MainUser from "./pages/User/MainUser.jsx"
 import Quiz from "./pages/User/Quiz.jsx"
 import Result from "./pages/User/Result.jsx"
+import Profile from "./pages/Profile.jsx"
+import ReductProfile from "./pages/User/ReductProfile.jsx"
+import Users from "./pages/Admin/Users.jsx"
+import ReductLesson from "./pages/Admin/ReductLesson.jsx"
 
 const router = createBrowserRouter([
     {
@@ -56,11 +60,11 @@ const userRouter = createBrowserRouter([
             },
             {
                 path: "/profile",
-                element: <>profile</>
+                element: <Profile />
             },
             {
                 path: "/redProfile",
-                element: <>redProfile</>
+                element: <ReductProfile />
             },
             {
                 path: "/lessons/:idLesson",
@@ -99,8 +103,8 @@ const adminRouter = createBrowserRouter([
                 element: <Lesson />
             },
             {
-                path: "/redLesson/:idLesson",
-                element: <>redLesson/:idLessonAdmin</>
+                path: "/reductLesson/:idLesson",
+                element: <ReductLesson />
             },
             {
                 path: "/newLesson",
@@ -108,11 +112,11 @@ const adminRouter = createBrowserRouter([
             },
             {
                 path: "/profile",
-                element: <>profileAdmin</>
+                element: <Profile />
             },
             {
                 path: "/users",
-                element: <>users</>
+                element: <Users />
             },
         ]
     },

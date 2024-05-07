@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import models from "../models/models.js";
 
 const Lesson = models.Lesson
@@ -41,7 +41,6 @@ export const createLesson = async (req, res) => {
     const image = req.files['image'] ? req.files['image'][0].filename : null
     const video = req.files['video'] ? req.files['video'][0].filename : null
 
-
     if (!name || !ageUnder || !ageUp || !typeId || !categoryId) return res.send({ message: "Все поля должны быть заполнены" })
     const lesson = await Lesson.create({
         name, content, video, ageUnder, ageUp, image, invite: '0', typeId, categoryId
@@ -51,7 +50,10 @@ export const createLesson = async (req, res) => {
 
 // изменить занятие
 export const changeLesson = async (req, res) => {
-    const { id, name, content, video, ageUnder, ageUp, image, invite, typeId, categoryId } = req.body;
+    const { id, name, content, ageUnder, ageUp, invite, typeId, categoryId } = req.body;
+
+    const image = req.files['image'] ? req.files['image'][0].filename : null
+    const video = req.files['video'] ? req.files['video'][0].filename : null
 
     if (!id) return res.send({ message: "ID урока обязателен для обновления" });
 
@@ -75,42 +77,46 @@ export const changeLesson = async (req, res) => {
 
 // создать пройденное занятие с результатами
 export const createLC = async (req, res) => {
-    const { result, promp, lessonId, userId } = req.body
+    const { result, promp, lessonId, userId } = req.body;
 
     const unique = await LessonComplited.findOne({
         where: { lessonId, userId }
-    })
+    });
 
     if (unique) {
-        const updateResult = await LessonComplited.update({
+        const updateResult = await unique.update({
             result
-        }, {
-            where: { lessonId, userId }
-        })
-        return res.send({ updateResult })
+        });
+
+        return res.send({ updateResult });
     } else {
         const LC = await LessonComplited.create({
             result, promp, lessonId, userId
-        })
-        return res.send({ LC })
+        });
+
+        const lesson = await Lesson.findOne({
+            where: { id: lessonId }
+        });
+
+        if (lesson) {
+            const updatedFinish = await lesson.update({
+                finish: lesson.finish + 1
+            }, {
+                where: { id: lessonId }
+            });
+        }
+
+        return res.send({ LC });
     }
-}
+};
+
 
 // все оконченные занятия определенного пользователя
 export const allCompliteUser = async (req, res) => {
     const { userId } = req.params
-    const LC = await LessonComplited.findAll({
-        where: { userId },
-        attributes: ['lessonId']
-    })
-    const lessonIds = LC.map(item => item.lessonId)
 
-    const lessons = await Lesson.findAll({
-        where: {
-            id: {
-                [Op.in]: lessonIds
-            }
-        }
+    const lessons = await LessonComplited.findAll({
+        where: { userId },
     })
 
     return res.send({ lessons })
@@ -123,7 +129,7 @@ export const resultsLesson = async (req, res) => {
     return res.send({ lessons })
 }
 
-// все записи по определенному оконченному занятию
+// результат пользователя по оконченному занятию
 export const resultLesson = async (req, res) => {
     const { lessonId, userId } = req.params
     const result = await LessonComplited.findOne({ where: { lessonId, userId } })
