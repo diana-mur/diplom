@@ -49,7 +49,7 @@ export default function Lesson() {
                 }
             });
         get({ url: `comments/allForLesson/${lessonId}`, dispatch, token })
-            .then(json => setComments(json.comments))
+            .then(json => setComments(json?.comments))
     }, [])
 
     let sumRating = 0
@@ -69,17 +69,23 @@ export default function Lesson() {
                 text: textComment
             }
         })
-        alert('Ваш комментарий отправлен на обработку.')
-        location.reload()
+            .then(json => {
+                alert(json?.message);
+                if (json?.message == 'Ваш комментарий отправлен на обработку.') {
+                    location.reload()
+                }
+            })
     }
 
     return (
         <>
             <div className="container">
-                <div className="">
-                    <h2>{data.name}</h2>
-                    <p className="mb-5">{data.categoryId}</p>
-                </div>
+                <Title type={6} title={data.name} secondTitle={data.categoryId} position={'md:flex justify-between items-center'}>
+                    {
+                        jwt.roleId == 'ADMIN' &&
+                        <button className="bg-blue-300 mt-2 md:mt-0" onClick={() => navigate(`../../../reductLesson/${lessonId}`)}>изменить</button>
+                    }
+                </Title>
                 <div className="grid grid-cols-1 gap-5 mb-3 lg:grid-cols-2">
                     <div className="w-full rounded-2xl blue aspect-video box-shadow">
                         <img src={`http://localhost:8080/${data.image}`} alt="изображение" />

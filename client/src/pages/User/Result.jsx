@@ -53,10 +53,13 @@ export default function Result() {
                 text: textComment
             }
         })
-        alert('Ваш комментарий отправлен на обработку.')
-    }
-
-    console.log(complete);
+        .then(json => {
+            alert(json?.message);
+            if (json?.message == 'Ваш комментарий отправлен на обработку.') {
+                location.reload()
+            }
+        })
+}
 
     if (lessonType == 'видео-урок') return (
         <div className="container">

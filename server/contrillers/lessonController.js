@@ -2,6 +2,7 @@ import { Op, where } from "sequelize";
 import models from "../models/models.js";
 
 const Lesson = models.Lesson
+const Question = models.Question
 const LessonComplited = models.LessonComplited
 const Category = models.Category
 const Type = models.Type
@@ -149,9 +150,9 @@ export const deleteLesson = async (req, res) => {
 
     const lesson = await Lesson.findOne({ where: { id: lessonId } })
     if (!lesson) return res.send({ message: "Занятие не найдено" })
-    await lesson.destroy()
-
     const LC = await LessonComplited.destroy({ where: { lessonId } })
+    const questions = await Question.destroy({ where: { lessonId } })
+    await lesson.destroy()
 
     return res.send({ lesson, LC })
 }

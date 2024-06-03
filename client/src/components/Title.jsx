@@ -1,7 +1,7 @@
-export const Title = ({ type, position, title, onClick, children }) => {
+export const Title = ({ type, position, title, onClick, children, secondTitle }) => {
     if (type == '1') {
         return (
-            <div className={position + " mb-5 "} onClick={onClick}>
+            <div className={position + " mb-5"} onClick={onClick}>
                 <h2>{title}</h2>
                 {children}
             </div>
@@ -38,6 +38,17 @@ export const Title = ({ type, position, title, onClick, children }) => {
         return (
             <div className={`flex mb-5 ${position}`} onClick={onClick}>
                 <h5>{title}</h5>
+                {children}
+            </div>
+        )
+    }
+    if (type == '6') {
+        return (
+            <div className={position + " mb-5 "} onClick={onClick}>
+                <div className="">
+                    <h2>{title}</h2>
+                    <p>{secondTitle}</p>
+                </div>
                 {children}
             </div>
         )

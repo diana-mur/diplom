@@ -148,7 +148,6 @@ function NewLesson() {
                 <div className="flex flex-col gap-5">
                     {
                         lessonType == 'тест' &&
-
                         <>
                             <p>Выберите правильный ответ на вопрос</p>
                             {
@@ -203,7 +202,6 @@ function NewLesson() {
                         </div>
                     }
                     <button className="bg-blue-300 self-start" onClick={handleClickPost}>создать</button>
-
                 </div>
             </div>
         </>

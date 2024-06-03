@@ -1,6 +1,5 @@
 import { Carousel } from "../components/Carousel/Carousel"
 import { MainImage } from "../components/MainImage"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Title } from "../components/Title"
 import useWindowSize from "../hooks/windowSize"
@@ -11,7 +10,6 @@ import photo4 from "../assets/photo4.png"
 import photo5 from "../assets/photo5.png"
 
 export const HomePage = () => {
-    const token = useSelector((state) => state.auth.token)
     const navigate = useNavigate()
     const { width, height } = useWindowSize();
     const numSlides = width > 1024 ? 3 : width > 640 ? 2 : 1
@@ -84,7 +82,7 @@ export const HomePage = () => {
                 <MainImage />
                 <div className="flex flex-col items-center gap-8 sm:gap-6 z-20 mb-14 sm:items-end sm:mb-0">
                     <h3 className="text-center sm:text-right leading-7">Вместе к звездам:<br /> найди свой путь<br /> в мире возможностей!</h3>
-                    <button onClick={token ? () => navigate('/') : () => navigate('/reg')} className="bg-blue-300 flex-1 w-[100%] sm:flex-grow-0 sm:w-auto">начать</button>
+                    <button onClick={() => navigate('/reg')} className="bg-blue-300 flex-1 w-[100%] sm:flex-grow-0 sm:w-auto">начать</button>
                 </div>
             </div>
             <div className="container">

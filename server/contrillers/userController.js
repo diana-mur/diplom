@@ -8,17 +8,19 @@ const User = models.User
 
 // создание пользователя
 export const reg = async (req, res) => {
+    const { surname, name, birthday, email, password } = req.body
+
+    if (!surname || !name || !birthday || !email || !password) return res.send({ message: 'Не все поля заполнены' })
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json(errors.array());
     }
-    const { surname, name, birthday, email, password } = req.body
 
     let user = await User.findOne({ where: { email } })
 
     if (user) return res.send({ message: 'Адрес эл. почты уже используется' })
 
-    if (!surname || !name || !birthday || !email || !password) return res.send({ message: 'Не все поля заполнены' })
 
     const hashPassword = bcrypt.hashSync(password, 10)
 
@@ -30,6 +32,8 @@ export const reg = async (req, res) => {
 // вход
 export const auth = async (req, res) => {
     const { email, password } = req.body
+
+    if (!email || !password) return res.status(400).send({ message: 'Не все поля заполнены' })
 
     const user = await User.findOne({ where: { email } })
 
@@ -87,6 +91,8 @@ export const changeUser = async (req, res) => {
 // смена пароля
 export const changePassword = async (req, res) => {
     const { id, prevPassword, newPassword } = req.body
+
+    if (!prevPassword || !newPassword) return res.send({ message: "Не все поля заполнены" })
 
     const user = await User.findOne({ where: { id } })
 

@@ -25,7 +25,6 @@ export default function Quiz() {
     const location = useLocation()
     const lessonId = location.pathname.split('/')[2]
 
-    // let videoBlob
     let jwt
     token ? jwt = jwtDecode(token) : null
 
@@ -91,7 +90,6 @@ export default function Quiz() {
         }
     }, [answers])
 
-
     const handlePromp = (e) => {
         e.preventDefault()
 
@@ -115,14 +113,11 @@ export default function Quiz() {
         navigate(`../../../lessons/${lessonId}/finish`)
     }
 
-    console.log(video);
-
     if (lessonType == 'видео-урок') return (
         <div className="container flex flex-col">
             <Title type={1} title={lessonName} />
-            {/* <iframe className="w-full aspect-video mb-5" src={`http://localhost:8080/${video}`}></iframe> */}
-            <iframe className="w-full aspect-video mb-5" src={video ? URL.createObjectURL(video) : null}></iframe>
-            <button className="self-end mb-3 bg-blue-300" onClick={handleFinish}>закончить</button>
+            <iframe className=" aspect-video" src={video ? URL.createObjectURL(video) : null}></iframe>
+            <button className="self-end mb-3 mt-5 bg-blue-300" onClick={handleFinish}>закончить</button>
         </div>
     )
 
@@ -170,7 +165,7 @@ export default function Quiz() {
                         </div>
                     }
                 </div>
-                <button className={`self-end mb-3 ${currentQuestionIndex + 1 == questions.length ? `bg-blue-300` : 'bg-white text-black'}`} onClick={() => handleAnswer(answer)}>{currentQuestionIndex + 1 == questions.length ? 'закончить' : 'далее'}</button>
+                <button className={`self-end mb-3 ${currentQuestionIndex == questions.length ? `bg-blue-300` : 'bg-white text-black'}`} onClick={() => handleAnswer(answer)}>{currentQuestionIndex + 1 == questions.length ? 'закончить' : 'далее'}</button>
                 <button className="self-end" onClick={handlePromp}>подсказка</button>
                 {
                     visiblePromp && <p>{promp}</p>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { get } from "../../hooks/fetchForm"
+import { Title } from "../../components/Title"
+import { InputFile } from "../../components/inputFile"
 
 export default function ReductLesson() {
     const [categories, setCategories] = useState([])
@@ -13,8 +15,10 @@ export default function ReductLesson() {
     const [ageUnder, setAgeUnder] = useState('')
     const [ageUp, setAgeUp] = useState('')
     const [image, setImage] = useState(null)
+    const [imageInput, setImageInput] = useState(null)
+    const [imageArray, setImageArray] = useState([])
     const [video, setVideo] = useState(null)
-    const [videoBlob, setVideoBlob] = useState(null)
+    const [videoInput, setVideoInput] = useState(null)
     const [lessonType, setLessonType] = useState('')
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -31,9 +35,30 @@ export default function ReductLesson() {
                 setAgeUnder(data.lesson.ageUnder);
                 setAgeUp(data.lesson.ageUp);
                 setImage(data.lesson.image);
-                setVideo(data.lesson.video);
                 setLessonType(data.lesson.typeId);
                 setCategory(data.lesson.categoryId);
+
+                const fetchVideo = async () => {
+                    if (data.lesson.video) {
+                        try {
+                            const response = await fetch(`http://localhost:8080/${data.lesson.video}`);
+                            const videoData = await response.arrayBuffer();
+                            const videoBlob = new Blob([videoData], { type: 'video/mp4' })
+                            setVideo(videoBlob)
+                        }
+                        catch (error) {
+                            console.error('Failed to fetch video:', error);
+                        }
+                    }
+                }
+                fetchVideo()
+            })
+        get({ url: `tests/allForUpdate/${lessonId}`, dispatch, token })
+            .then(data => {
+                setDataList(data.questions)
+                data.questions.forEach(item => {
+                    if (item.image) setImageArray(prev => [...prev, { id: item.id, image: item.image }])
+                })
             })
         get({ url: `lessons/categories`, dispatch, token })
             .then(json => {
@@ -61,7 +86,7 @@ export default function ReductLesson() {
     }
 
     const handleChangeDataFile = (index, field, e) => {
-        console.log(e);
+        console.log(e.target.files[0]);
         const file = e.target.files[0]
         file ? setDataList(prev =>
             prev.map((item, ix) => ix == index ? { ...item, [field]: file } : item)
@@ -82,14 +107,16 @@ export default function ReductLesson() {
 
         const formdata = new FormData()
 
+        formdata.append('id', lessonId)
         formdata.append('name', nameLesson)
         formdata.append('content', content)
         formdata.append('ageUnder', ageUnder)
         formdata.append('ageUp', ageUp)
-        formdata.append('image', image)
+        formdata.append('image', imageInput)
         formdata.append('typeId', lessonType)
         formdata.append('categoryId', category)
-        if (lessonType == 'видео-урок') formdata.append('video', video)
+
+        if (lessonType == 'видео-урок') formdata.append('video', videoInput)
 
         const response = await fetch('http://localhost:8080/api/lessons/change', {
             method: "POST",
@@ -97,11 +124,13 @@ export default function ReductLesson() {
         }).then(data => data.json())
 
         const formArray = new FormData()
-        console.log(response);
+        // console.log(response);
 
         if (lessonType == 'тест') {
-            formArray.append('lessonId', response.lesson.id)
+            formArray.append('lessonId', lessonId)
             dataList.forEach((question, index) => {
+                formArray.append(`questions[${index}][index]`, index);
+                if (question.id) formArray.append(`questions[${index}][id]`, question.id);
                 formArray.append(`questions[${index}][image]`, question.image);
                 formArray.append(`questions[${index}][question]`, question.question);
                 formArray.append(`questions[${index}][v1]`, question.v1);
@@ -112,7 +141,7 @@ export default function ReductLesson() {
                 formArray.append(`questions[${index}][clue]`, question.clue);
             })
 
-            const response2 = await fetch('http://localhost:8080/api/tests/create', {
+            const response2 = await fetch('http://localhost:8080/api/tests/update', {
                 method: "POST",
                 body: formArray
             }).then(data => data.json())
@@ -124,14 +153,25 @@ export default function ReductLesson() {
         navigate(`../../lessons/${response.lesson.id}`)
     }
 
+    const handleDelete = async () => {
+        get({ url: `lessons/delete/${lessonId}`, dispatch, token })
+            .then(json => {
+                if (json?.lesson) {
+                    alert('Занятие удалено');
+                    navigate('../../../');
+                } else {
+                    console.log(json);
+                    alert(json?.message);
+                }
+            })
+    }
+
     console.log(dataList);
 
-    if (lessonType == 'видео-урок') return
-
-    if (lessonType == 'тест') return (
+    return (
         <>
             <div className="container">
-                <Title type={1} title={'Редактирование занятия'} />
+                <Title type={1} title={`Редактирование занятия "${nameLesson}"`} />
                 <input type="text" placeholder="Название" value={nameLesson} onChange={e => setNameLesson(e.target.value)} />
                 <textarea name="" id="" cols="30" rows="10" placeholder="Описание" value={content} onChange={e => setContent(e.target.value)} />
                 <select value={category} onChange={e => setCategory(e.target.value)} name="" id="">
@@ -145,21 +185,17 @@ export default function ReductLesson() {
                     <input type="text" value={ageUnder} onChange={e => setAgeUnder(e.target.value)} placeholder="Возраст от" style={{ width: '175px' }} />
                     <input type="text" value={ageUp} onChange={e => setAgeUp(e.target.value)} placeholder="Возраст до" style={{ width: '175px' }} />
                 </div>
-                <InputFile file={image} setFile={setImage} handleClick={handleClick} idInput={'imageInput'} />
+                <Title type={4} title={'Сохраненное изображение'} />
+                <div className="w-full mb-5 md:w-1/2 aspect-video overflow-hidden">
+                    <img src={`http://localhost:8080/${image}`} alt="" />
+                </div>
+                <InputFile file={imageInput} setFile={setImageInput} handleClick={handleClick} idInput={'imageInput'} />
             </div>
             <div className="container">
-                <p>Обратите внимание, что можно выбрать только один тип занятия</p>
-                <div className="flex gap-5 mt-3">
-                    {
-                        types.map((type) => (
-                            <Title type={4} key={type.id} title={type.id} onClick={() => setLessonType(type.id)} position={lessonType == type.id ? '' : 'text-gray-400'} />
-                        ))
-                    }
-                </div>
+                <Title type={3} title={lessonType} />
                 <div className="flex flex-col gap-5">
                     {
                         lessonType == 'тест' &&
-
                         <>
                             <p>Выберите правильный ответ на вопрос</p>
                             {
@@ -178,6 +214,7 @@ export default function ReductLesson() {
                                                         name={`answer${index}`}
                                                         id={`answer${index}v${i + 1}`}
                                                         value={`v${i + 1}`}
+                                                        checked={q.correct === `v${i + 1}`}
                                                         onChange={e => handleChangeSelect(e, index)}
                                                     />
                                                     <label htmlFor={`answer${index}v${i + 1}`}>
@@ -195,7 +232,13 @@ export default function ReductLesson() {
                                             name="clue"
                                             placeholder="Подсказка"
                                             value={q.clue}
-                                            onChange={e => handleChangeData(e, index, `clue`)}></textarea>
+                                            onChange={e => handleChangeData(e, index, `clue`)}>
+                                        </textarea>
+                                        {imageArray.find(item => item.id == q.id) &&
+                                            <div className="w-full mb-5 md:w-1/2 aspect-video overflow-hidden">
+                                                <img src={`http://localhost:8080/${imageArray.find(item => item.id == q.id).image}`} alt="" />
+                                            </div>
+                                        }
                                         <input id={`fileInput${index}`} type="file" onChange={e => handleChangeDataFile(index, `image`, e)} />
                                         <label htmlFor={`fileInput${index}`} className="flex gap-5 items-start">
                                             <div className="bg-white text-blue-950 py-4 px-5 rounded-3xl w-full sm:w-[370px]">{q.image ? q.image.name : 'Изображение к вопросу'}</div>
@@ -210,11 +253,13 @@ export default function ReductLesson() {
                     {
                         lessonType == 'видео-урок' &&
                         <div className="mt-5 mb-5">
-                            <InputFile file={video} setFile={setVideo} handleClick={handleClick} idInput={'videoInput'} />
+                            <Title type={4} title={'Сохраненное видео'} />
+                            <iframe className="w-full aspect-video mb-5" src={video ? URL.createObjectURL(video) : null}></iframe>
+                            <InputFile file={videoInput} setFile={setVideoInput} handleClick={handleClick} idInput={'videoInput'} />
                         </div>
                     }
-                    <button className="bg-blue-300 self-start" onClick={handleClickPost}>создать</button>
-
+                    <button className="bg-blue-300 self-start" onClick={handleClickPost}>сохранить</button>
+                    <button className="bg-red-400 self-start" onClick={handleDelete}>удалить</button>
                 </div>
             </div>
         </>
