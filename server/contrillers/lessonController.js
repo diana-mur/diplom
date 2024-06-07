@@ -140,8 +140,14 @@ export const resultLesson = async (req, res) => {
 // найти урок
 export const findLesson = async (req, res) => {
     const { lessonId } = req.params
-    const lesson = await Lesson.findOne({ where: { id: lessonId } })
-    return res.send({ lesson })
+    try {
+        if (!lessonId) return res.status(400).send({ message: 'Должен быть ид урока' })
+        const lesson = await Lesson.findOne({ where: { id: lessonId } })
+        return res.send({ lesson })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ message: 'Ошибка сервера' })
+    }
 }
 
 // удалить занятие

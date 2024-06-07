@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { jwtDecode } from "jwt-decode"
 import { Title } from "../../components/Title"
+import ModelViewer from "../../components/models3D/ModelViewer"
+import { Footer } from "../../components/Footer"
 
 export default function Quiz() {
     const [lessonName, setLessonName] = useState('')
@@ -15,7 +17,9 @@ export default function Quiz() {
     const [promp, setPromp] = useState('')
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [currentPrompCount, setCurrentPrompCount] = useState(0)
-    const [visiblePromp, setVisiblePromp] = useState(false)
+    // const [visiblePromp, setVisiblePromp] = useState(false)
+    const [visible, setVisible] = useState(false)
+    const [model, setModel] = useState(1)
 
     const question = questions[currentQuestionIndex]
 
@@ -60,7 +64,7 @@ export default function Quiz() {
     const handleAnswer = (ans) => {
         if (!ans) return alert('нужно отметить вариант')
         setAnswer('')
-        setVisiblePromp(false);
+        // setVisiblePromp(false);
         setAnswers(prev => [...prev, { id: question?.id, answer: ans }])
 
         if (currentQuestionIndex + 1 < questions.length) {
@@ -90,15 +94,31 @@ export default function Quiz() {
         }
     }, [answers])
 
+    console.log(promp);
+
     const handlePromp = (e) => {
-        e.preventDefault()
+        // e.preventDefault()
 
         get({ url: `tests/clue/${question?.id}`, dispatch, token })
             .then(json => {
                 setPromp(json.clue);
                 setCurrentPrompCount(currentPrompCount + 1);
-                setVisiblePromp(true)
+                // setVisiblePromp(true)
             })
+
+        const timer = setTimeout(() => {
+            setModel(4);
+            // setVisible(!visible)
+        }, 1800)
+        const timer2 = setTimeout(() => {
+            setModel(1);
+            // setVisible(!visible)
+        }, 3500)
+
+        return () => {
+            clearTimeout(timer)
+            clearTimeout(timer2)
+        }
     }
 
     const handleFinish = () => {
@@ -166,11 +186,22 @@ export default function Quiz() {
                     }
                 </div>
                 <button className={`self-end mb-3 ${currentQuestionIndex == questions.length ? `bg-blue-300` : 'bg-white text-black'}`} onClick={() => handleAnswer(answer)}>{currentQuestionIndex + 1 == questions.length ? 'закончить' : 'далее'}</button>
-                <button className="self-end" onClick={handlePromp}>подсказка</button>
-                {
+                {/* для мобилки
+                 <button className="self-end" onClick={handlePromp}>подсказка</button> */}
+                {/* {
                     visiblePromp && <p>{promp}</p>
-                }
+                } */}
             </div>
+            <div className={`clouds ${visible ? 'vis' : 'hid'}`}>
+                <div className="cloud">
+                    <p style={{color: 'black'}}>{promp}</p>
+                </div>
+                <div className="cloud2"></div>
+            </div>
+            <div className="model" onClick={handlePromp}>
+                <ModelViewer visible={visible} setVisible={setVisible} model={model} />
+            </div>
+            <Footer />
         </div>
     )
 }

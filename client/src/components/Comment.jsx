@@ -10,13 +10,14 @@ export default function Comment({ type, token, dispatch, commentId, statusId, le
     useEffect(() => {
         get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
             .then(json => setNameLesson(json.lesson.name));
+
         if (userId) {
             get({ url: `users/find/${userId}`, dispatch, token })
                 .then(json => {
                     setName(json.user.name);
                     setSurname(json.user.surname)
-                })
-        }
+                });
+        };
     }, [token])
 
     function handleStatusChange(statusId) {
@@ -25,14 +26,14 @@ export default function Comment({ type, token, dispatch, commentId, statusId, le
                 commentId,
                 statusId
             }
-        })
-        setComments(comments.filter(comm => comm.id != commentId))
-    }
+        });
+        setComments(comments.filter(comm => comm.id != commentId));
+    };
 
     function deleteComment() {
-        get({ url: `comments/delete/${commentId}`, dispatch, token })
-        setComments(comments.filter(comm => comm.id != commentId))
-    }
+        get({ url: `comments/delete/${commentId}`, dispatch, token });        
+        setComments(comments.filter(comm => comm.id != commentId));
+    };
 
     if (type == 1) {
         return (

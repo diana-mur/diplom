@@ -3,15 +3,34 @@ import { get } from "../../hooks/fetchForm"
 import { useDispatch, useSelector } from "react-redux"
 import { Title } from "../../components/Title"
 import { MainCardLesson } from "../../components/mainCardLesson"
+import ModelViewer from "../../components/models3D/ModelViewer"
+import { sayHi } from "../../redux/authSlice"
+import { Footer } from "../../components/Footer"
 
 export default function MainUser() {
     const [cards, setCards] = useState([])
+    const [visible, setVisible] = useState(false)
+    const [model, setModel] = useState(1)
     const dispatch = useDispatch()
     const token = useSelector(state => state.auth.token)
+    const isSayHi = useSelector(state => state.auth.isSayHi)
 
     useEffect(() => {
         get({ url: 'lessons/all', dispatch, token })
             .then(json => setCards(json.filteredLessons))
+
+        if (isSayHi) {
+            const timer = setTimeout(() => {
+                setModel(2);
+                setVisible(true)
+            }, 1800)
+
+            const timer2 = setTimeout(() => {
+                setModel(1);
+                setVisible(false);
+                dispatch(sayHi())
+            }, 3950)
+        }
     }, [])
 
     return (
@@ -41,7 +60,18 @@ export default function MainUser() {
                         </div>
                     ))
                 }
+                {/* Моделька */}
+                <div className={`clouds ${visible ? 'vis' : 'hid'}`}>
+                    <div className="cloud">
+                        <p style={{ color: 'black' }}>Привет! Выбери понравившееся занятие.</p>
+                    </div>
+                    <div className="cloud2"></div>
+                </div>
+                <div className="model">
+                    <ModelViewer visible={visible} setVisible={setVisible} model={model} />
+                </div>
             </div>
+            <Footer />
         </>
     )
 }

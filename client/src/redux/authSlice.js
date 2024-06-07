@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     error: undefined,
     id: localStorage.getItem('id'),
-    token: localStorage.getItem('token')
+    token: localStorage.getItem('token'),
+    isSayHi: localStorage.getItem('isSayHi')
 }
 
 export const authSlice = createSlice({
@@ -19,6 +20,12 @@ export const authSlice = createSlice({
 
             localStorage.removeItem("id")
             localStorage.removeItem("token")
+            localStorage.removeItem("isSayHi")
+        },
+        sayHi: (state) => {
+            state.isSayHi = false
+
+            localStorage.setItem('isSayHi', false)
         }
     },
     extraReducers: (builder) => {
@@ -35,6 +42,7 @@ export const authSlice = createSlice({
 
                 localStorage.setItem("id", payload.user?.id)
                 localStorage.setItem("token", payload.token)
+                localStorage.setItem("isSayHi", true)
 
                 state.error = undefined
                 state.loading = false
@@ -70,5 +78,5 @@ export const authThunk = createAsyncThunk('authThunk', async (data, { rejectWith
     }
 })
 
-export const { logOut } = authSlice.actions
+export const { logOut, sayHi } = authSlice.actions
 export default authSlice.reducer

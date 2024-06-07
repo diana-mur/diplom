@@ -817,6 +817,58 @@ textarea {
   /* Пример для 50% заполнения */
 }
 
+.model {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+
+canvas {
+  aspect-ratio: 1/1;
+  height: 300px;
+  width: 300px;
+}
+
+.clouds {
+  position: fixed;
+  width: 250px;
+  height: auto;
+  right: 250px;
+  bottom: 250px;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.clouds.hid {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.clouds.vis {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cloud {
+  max-width: 250px;
+  border-radius: 50%;
+  background-color: white;
+  padding: 23px;
+  box-shadow: 0px 0px 7px white;
+}
+
+.cloud2 {
+  width: 25px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0px 0px 7px white;
+  margin-left: auto;
+}
+
+.\!visible {
+  visibility: visible !important;
+}
+
 .visible {
   visibility: visible;
 }
@@ -1029,6 +1081,10 @@ textarea {
   height: 100%;
 }
 
+.h-60 {
+  height: 15rem;
+}
+
 .min-h-\[90vh\] {
   min-height: 90vh;
 }
@@ -1205,11 +1261,6 @@ textarea {
 .bg-gray-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
-}
-
-.bg-red-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(252 165 165 / var(--tw-bg-opacity));
 }
 
 .bg-red-400 {

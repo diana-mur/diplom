@@ -8,6 +8,8 @@ import Chart from "../components/Chart"
 import { get, post } from "../hooks/fetchForm"
 import Comment from "../components/Comment"
 import { InputComment } from "../components/inputComment"
+import { Footer } from "../components/Footer"
+import ModelViewer from "../components/models3D/ModelViewer"
 
 export default function Lesson() {
     const [data, setData] = useState('')
@@ -17,6 +19,7 @@ export default function Lesson() {
     const [promps, setPromps] = useState([])
     const [textComment, setTextComment] = useState('')
     const [userRating, setUserRating] = useState(0)
+    const [visible, setVisible] = useState(false)
 
     const token = useSelector(state => state.auth.token)
     const dispatch = useDispatch()
@@ -147,6 +150,23 @@ export default function Lesson() {
                     }
                 </div>
             </div>
+            {
+                jwt?.roleId == "USER" &&
+                <>
+                    <div className={`clouds ${visible ? 'vis' : 'hid'}`}>
+                        <div className="cloud">
+                            <p style={{ color: 'black' }}>Привет! Выбери понравившееся занятие.</p>
+                        </div>
+                        <div className="cloud2"></div>
+                    </div>
+                    <div className="model">
+                        <ModelViewer visible={visible} setVisible={setVisible} model={1} />
+                    </div>
+                </>
+            }
+            {
+                jwt?.roleId == "USER" && <Footer />
+            }
         </>
     )
 }
