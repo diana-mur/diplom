@@ -4,7 +4,7 @@ import { useAnimations, useGLTF } from '@react-three/drei';
 
 export default function Model2() {
   const group = useRef()
-  const { scene, animations } = useGLTF('models/hi.glb');
+  const { scene, animations } = useGLTF('/models/hi.glb');
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {

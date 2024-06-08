@@ -17,6 +17,7 @@ export const authSlice = createSlice({
             state.error = undefined
             state.id = undefined
             state.token = undefined
+            state.isSayHi = undefined
 
             localStorage.removeItem("id")
             localStorage.removeItem("token")
@@ -39,6 +40,7 @@ export const authSlice = createSlice({
             if (payload.user && payload.token) {
                 state.id = payload.user?.id
                 state.token = payload.token
+                state.isSayHi = true
 
                 localStorage.setItem("id", payload.user?.id)
                 localStorage.setItem("token", payload.token)

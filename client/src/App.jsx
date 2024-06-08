@@ -67,23 +67,23 @@ const userRouter = createBrowserRouter([
                 element: <ReductProfile />
             },
             {
-                path: "/lessons/:idLesson",
+                path: "/lessons/:lessonId",
                 element: <Lesson />
             },
             {
-                path: "/lessons/:idLesson/quiz",
+                path: "/lessons/:lessonId/quiz",
                 element: <Quiz />
             },
             {
-                path: "/lessons/:idLesson/finish",
+                path: "/lessons/:lessonId/finish",
                 element: <Result />
             },
         ]
     },
-    {
-        path: "*",
-        element: <Navigate to={'/'} />
-    },
+    // {
+    //     path: "*",
+    //     element: <Navigate to={'/'} />
+    // },
 ])
 
 const adminRouter = createBrowserRouter([
@@ -99,11 +99,11 @@ const adminRouter = createBrowserRouter([
                 element: <MainAdmin />
             },
             {
-                path: "/lessons/:idLesson",
+                path: "/lessons/:lessonId",
                 element: <Lesson />
             },
             {
-                path: "/reductLesson/:idLesson",
+                path: "/reductLesson/:lessonId",
                 element: <ReductLesson />
             },
             {

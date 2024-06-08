@@ -16,7 +16,10 @@ export const MainImage = () => {
                     <img src={img1} alt="" className="object-cover h-full w-full" />
                 </div>
                 <div className="absolute h-[50%] w-[50%] top-[20%] left-1/2 -translate-x-1/2">
-                    <img src={Earth} alt="" className="h-full mx-auto" />
+                    <img src={Earth} alt="" style={{objectFit: 'contain',
+                        height: '100%',
+                        width: 'auto'
+                    }} className="h-full mx-auto" />
                 </div>
                 <div className="absolute w-[20%] aspect-square rounded-[50%] overflow-hidden right-[12%] top-[12%] box-shadow hover:w-[21%] transition-all">
                     <img src={img2} alt="" className="object-cover h-full w-full" />

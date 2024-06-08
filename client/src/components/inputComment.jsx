@@ -41,7 +41,7 @@ export const InputComment = ({
     return (
         compl && !commenting && !compliteFilter &&
         <div className="container">
-            <Title type={3} title={'Оставьте отзыв'} />
+            <Title type={3} title={'Оставь отзыв о полученном опыте'} />
             <HandleRating onRatingChange={setUserRating} />
             <textarea type="text" value={textComment} onChange={e => setTextComment(e.target.value)} className="mb-5" placeholder="Текст отзыва" required />
             <button className={styleButton} onClick={handleButtonPostComment}>отправить</button>

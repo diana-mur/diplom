@@ -26,7 +26,7 @@ export const reg = async (req, res) => {
 
     user = await User.create({ surname, name, birthday, email, password: hashPassword, roleId: 'USER' })
 
-    return res.send({ user })
+    return res.send({ message: 'Пользователь успешно зарегистрирован.' })
 }
 
 // вход

@@ -8,17 +8,19 @@ export default function Comment({ type, token, dispatch, commentId, statusId, le
     const [surname, setSurname] = useState('')
 
     useEffect(() => {
-        get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
-            .then(json => setNameLesson(json.lesson.name));
+        if (lessonId) {
+            get({ url: `lessons/findLesson/${lessonId}`, dispatch, token })
+                .then(json => setNameLesson(json?.lesson?.name));
+        }
 
         if (userId) {
             get({ url: `users/find/${userId}`, dispatch, token })
                 .then(json => {
-                    setName(json.user.name);
-                    setSurname(json.user.surname)
+                    setName(json?.user?.name);
+                    setSurname(json?.user?.surname)
                 });
         };
-    }, [token])
+    }, [token, lessonId])
 
     function handleStatusChange(statusId) {
         post({
@@ -31,7 +33,7 @@ export default function Comment({ type, token, dispatch, commentId, statusId, le
     };
 
     function deleteComment() {
-        get({ url: `comments/delete/${commentId}`, dispatch, token });        
+        get({ url: `comments/delete/${commentId}`, dispatch, token });
         setComments(comments.filter(comm => comm.id != commentId));
     };
 

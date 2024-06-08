@@ -6,14 +6,19 @@ import Model2 from "./Model2";
 import Model3 from "./Model3";
 import Model4 from "./Model4";
 
-const ModelViewer = ({ visible, setVisible, model }) => {
+const ModelViewer = ({ action, model }) => {
   const model1Ref = useRef()
   const model2Ref = useRef()
   const model3Ref = useRef()
   const model4Ref = useRef()
 
   return (
-    <Canvas camera={{ position: [0, 0.08, 0.55], fov: 75 }} onClick={() => setVisible(!visible)}>
+    <Canvas style={{
+      height: '25vh',
+      width: 'auto',
+      aspectRatio: '1/1'
+
+    }} className=" h-2/5 w-auto aspect-square" camera={{ position: [0, 0.08, 0.55], fov: 75 }} onClick={action}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
       <Suspense fallback={null}>

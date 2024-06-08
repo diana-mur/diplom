@@ -20,14 +20,17 @@ export const Carousel = ({ title, children, summaSlides, numSlides }) => {
         <div className="container">
             <div className="flex flex-col items-center mb-7 sm:mb-3 sm:flex-row justify-between w-full">
                 {title}
-                <div className="">
-                    <button onClick={() => toLeft()} className="bg-white pt-2 pr-3 pb-3 pl-2 rounded-lg mr-2">
-                        <img src={left} alt="" />
-                    </button>
-                    <button onClick={() => toRight()} className="bg-white pt-2 pr-3 pb-3 pl-2 rounded-lg">
-                        <img src={right} alt="" />
-                    </button>
-                </div>
+                {
+                    number > 0 &&
+                    <div className="">
+                        <button onClick={() => toLeft()} className="bg-white pt-2 pr-3 pb-3 pl-2 rounded-lg mr-2">
+                            <img src={left} alt="" />
+                        </button>
+                        <button onClick={() => toRight()} className="bg-white pt-2 pr-3 pb-3 pl-2 rounded-lg">
+                            <img src={right} alt="" />
+                        </button>
+                    </div>
+                }
             </div>
             <div className="overflow-hidden">
                 <div className="flex gap-[2%] w-full transition-transform duration-1000 ease-in-out" style={{

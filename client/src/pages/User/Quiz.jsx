@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode"
 import { Title } from "../../components/Title"
 import ModelViewer from "../../components/models3D/ModelViewer"
 import { Footer } from "../../components/Footer"
+import useWindowSize from "../../hooks/windowSize"
 
 export default function Quiz() {
     const [lessonName, setLessonName] = useState('')
@@ -17,9 +18,9 @@ export default function Quiz() {
     const [promp, setPromp] = useState('')
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [currentPrompCount, setCurrentPrompCount] = useState(0)
-    // const [visiblePromp, setVisiblePromp] = useState(false)
     const [visible, setVisible] = useState(false)
     const [model, setModel] = useState(1)
+    const [visibleNotice, setVisibleNotice] = useState(false)
 
     const question = questions[currentQuestionIndex]
 
@@ -28,6 +29,9 @@ export default function Quiz() {
     const token = useSelector((state) => state.auth.token)
     const location = useLocation()
     const lessonId = location.pathname.split('/')[2]
+
+    const { height } = useWindowSize()
+    const rightIndent = height / 4 - 50
 
     let jwt
     token ? jwt = jwtDecode(token) : null
@@ -59,21 +63,36 @@ export default function Quiz() {
                 }
             }
             )
+        const timer = setTimeout(() => {
+            setModel(4);
+            setVisibleNotice(true)
+        }, 800)
+
+        const timer2 = setTimeout(() => {
+            setModel(1);
+            setVisibleNotice(false);
+        }, 3200)
+
+        return () => {
+            clearTimeout(timer)
+            clearTimeout(timer2)
+        }
     }, [token])
 
     const handleAnswer = (ans) => {
         if (!ans) return alert('нужно отметить вариант')
         setAnswer('')
-        // setVisiblePromp(false);
         setAnswers(prev => [...prev, { id: question?.id, answer: ans }])
 
-        if (currentQuestionIndex + 1 < questions.length) {
+        if (currentQuestionIndex < questions.length) {
             setCurrentQuestionIndex(currentQuestionIndex + 1)
-        }
+        } 
     }
 
+    console.log(answer); 
+
     useEffect(() => {
-        if (currentQuestionIndex + 1 == questions.length) {
+        if (questions.length >= 1 && currentQuestionIndex == questions.length) {
             post({
                 url: `tests/check`, dispatch, token, data: {
                     answers
@@ -94,25 +113,21 @@ export default function Quiz() {
         }
     }, [answers])
 
-    console.log(promp);
-
     const handlePromp = (e) => {
-        // e.preventDefault()
+        e.preventDefault()
 
         get({ url: `tests/clue/${question?.id}`, dispatch, token })
             .then(json => {
                 setPromp(json.clue);
                 setCurrentPrompCount(currentPrompCount + 1);
-                // setVisiblePromp(true)
             })
 
         const timer = setTimeout(() => {
             setModel(4);
-            // setVisible(!visible)
         }, 1800)
+
         const timer2 = setTimeout(() => {
             setModel(1);
-            // setVisible(!visible)
         }, 3500)
 
         return () => {
@@ -121,6 +136,7 @@ export default function Quiz() {
         }
     }
 
+    // отправка результатов для видео-урока
     const handleFinish = () => {
         post({
             url: `lessons/createComplite`, dispatch, token, data: {
@@ -134,11 +150,25 @@ export default function Quiz() {
     }
 
     if (lessonType == 'видео-урок') return (
-        <div className="container flex flex-col">
-            <Title type={1} title={lessonName} />
-            <iframe className=" aspect-video" src={video ? URL.createObjectURL(video) : null}></iframe>
-            <button className="self-end mb-3 mt-5 bg-blue-300" onClick={handleFinish}>закончить</button>
-        </div>
+        <>
+            <div className="container flex flex-col">
+                <Title type={1} title={lessonName} />
+                <iframe className=" aspect-video" src={video ? URL.createObjectURL(video) : null}></iframe>
+                <button className="self-end mb-3 mt-5 bg-blue-300" onClick={handleFinish}>закончить</button>
+            </div>
+            <div className={`clouds ${visibleNotice || visible ? 'vis' : 'hid'}`} style={{
+                right: `${rightIndent}px`
+            }}>
+                <div className="cloud">
+                    <p style={{ color: 'black' }}>Для окончания нажми кнопку "закончить".</p>
+                </div>
+                <div className="cloud2"></div>
+            </div>
+            <div className="model">
+                <ModelViewer model={model} action={() => setVisible(!visible)} />
+            </div>
+            <Footer />
+        </>
     )
 
     if (lessonType == 'тест') return (
@@ -186,20 +216,27 @@ export default function Quiz() {
                     }
                 </div>
                 <button className={`self-end mb-3 ${currentQuestionIndex == questions.length ? `bg-blue-300` : 'bg-white text-black'}`} onClick={() => handleAnswer(answer)}>{currentQuestionIndex + 1 == questions.length ? 'закончить' : 'далее'}</button>
-                {/* для мобилки
-                 <button className="self-end" onClick={handlePromp}>подсказка</button> */}
-                {/* {
-                    visiblePromp && <p>{promp}</p>
-                } */}
             </div>
-            <div className={`clouds ${visible ? 'vis' : 'hid'}`}>
+            {/* уведомление о возможной помощи */}
+            <div className={`clouds ${visibleNotice ? 'vis' : 'hid'}`} style={{
+                right: `${rightIndent}px`
+            }}>
                 <div className="cloud">
-                    <p style={{color: 'black'}}>{promp}</p>
+                    <p style={{ color: 'black' }}>Нажми на меня, чтобы получить подсказку</p>
+                </div>
+                <div className="cloud2"></div>
+            </div>
+            {/* подсказка */}
+            <div className={`clouds ${visible ? 'vis' : 'hid'}`} style={{
+                right: `${rightIndent}px`
+            }}>
+                <div className="cloud">
+                    <p style={{ color: 'black' }}>{promp}</p>
                 </div>
                 <div className="cloud2"></div>
             </div>
             <div className="model" onClick={handlePromp}>
-                <ModelViewer visible={visible} setVisible={setVisible} model={model} />
+                <ModelViewer model={model} action={() => setVisible(!visible)} />
             </div>
             <Footer />
         </div>

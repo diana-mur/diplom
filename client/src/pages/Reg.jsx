@@ -16,7 +16,7 @@ export const Reg = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (regState.user) {
+        if (regState.message == 'Пользователь успешно зарегистрирован.') {
             navigate('/auth')
         }
     }, [regState])

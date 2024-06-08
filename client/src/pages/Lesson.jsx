@@ -10,6 +10,7 @@ import Comment from "../components/Comment"
 import { InputComment } from "../components/inputComment"
 import { Footer } from "../components/Footer"
 import ModelViewer from "../components/models3D/ModelViewer"
+import useWindowSize from "../hooks/windowSize"
 
 export default function Lesson() {
     const [data, setData] = useState('')
@@ -20,12 +21,16 @@ export default function Lesson() {
     const [textComment, setTextComment] = useState('')
     const [userRating, setUserRating] = useState(0)
     const [visible, setVisible] = useState(false)
+    const [model, setModel] = useState(1)
 
     const token = useSelector(state => state.auth.token)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const loc = useLocation()
     const lessonId = loc.pathname.split('/')[2]
+
+    const { height } = useWindowSize()
+    const rightIndent = height / 4 - 50
 
     let jwt
     token ? jwt = jwtDecode(token) : null
@@ -43,6 +48,7 @@ export default function Lesson() {
                                     resultsLesson.lessons.forEach(result => {
                                         const resultMath = (result.result / tests.questions?.length) * 100
                                         setResults(prev => [...prev, { result: resultMath }])
+
                                         const prompMath = (result.promp / tests.questions?.length) * 100
                                         setPromps(prev => [...prev, { result: prompMath }])
                                     })
@@ -51,8 +57,24 @@ export default function Lesson() {
                         })
                 }
             });
+
         get({ url: `comments/allForLesson/${lessonId}`, dispatch, token })
             .then(json => setComments(json?.comments))
+
+        const timer = setTimeout(() => {
+            setModel(4);
+            setVisible(true)
+        }, 800)
+
+        const timer2 = setTimeout(() => {
+            setModel(1);
+            setVisible(false);
+        }, 3200)
+
+        return () => {
+            clearTimeout(timer)
+            clearTimeout(timer2)
+        }
     }, [])
 
     let sumRating = 0
@@ -99,7 +121,7 @@ export default function Lesson() {
                 {
                     jwt?.roleId == "USER" &&
                     <div className="flex">
-                        <button className="bg-blue-300 ml-auto" onClick={() => navigate(`../../lessons/${lessonId}/quiz`)}>{complete ? "пройти повторно" : "начать"}</button>
+                        <button className="bg-blue-300 ml-auto" onClick={() => navigate(`../../../lessons/${lessonId}/quiz`)}>{complete ? "пройти повторно" : "начать"}</button>
                     </div>
                 }
             </div>
@@ -153,19 +175,19 @@ export default function Lesson() {
             {
                 jwt?.roleId == "USER" &&
                 <>
-                    <div className={`clouds ${visible ? 'vis' : 'hid'}`}>
+                    <div className={`clouds ${visible ? 'vis' : 'hid'}`} style={{
+                        right: `${rightIndent}px`
+                    }}>
                         <div className="cloud">
-                            <p style={{ color: 'black' }}>Привет! Выбери понравившееся занятие.</p>
+                            <p style={{ color: 'black' }}>Если во время занятия тебе понадобится подсказка - кликни на меня.</p>
                         </div>
                         <div className="cloud2"></div>
                     </div>
                     <div className="model">
-                        <ModelViewer visible={visible} setVisible={setVisible} model={1} />
+                        <ModelViewer model={model} action={() => setVisible(!visible)} />
                     </div>
+                    <Footer />
                 </>
-            }
-            {
-                jwt?.roleId == "USER" && <Footer />
             }
         </>
     )
