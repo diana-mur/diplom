@@ -80,10 +80,10 @@ const userRouter = createBrowserRouter([
             },
         ]
     },
-    // {
-    //     path: "*",
-    //     element: <Navigate to={'/'} />
-    // },
+    {
+        path: "*",
+        element: <Navigate to={'/'} />
+    },
 ])
 
 const adminRouter = createBrowserRouter([

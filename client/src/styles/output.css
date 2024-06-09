@@ -446,19 +446,6 @@ video {
   display: none;
 }
 
-#document body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  video,
-        video:-webkit-full-page-media {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    object-fit: contain;
-  }
-}
-
 h1,
     h2,
     h3,
@@ -809,11 +796,9 @@ textarea {
   height: 24px;
   -webkit-mask-image: url('../../src/assets/star.svg');
           mask-image: url('../../src/assets/star.svg');
-  /* Путь к SVG файлу со звездой */
   -webkit-mask-size: cover;
           mask-size: cover;
   background-color: gray;
-  /* Цвет неактивной звезды */
 }
 
 .gold {
@@ -822,7 +807,6 @@ textarea {
 
 .partial {
   background: linear-gradient(to right, gold 50%, gray 50%);
-  /* Пример для 50% заполнения */
 }
 
 .model {

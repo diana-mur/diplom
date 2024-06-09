@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { get, post } from "../../hooks/fetchForm"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
@@ -86,10 +86,10 @@ export default function Quiz() {
 
         if (currentQuestionIndex < questions.length) {
             setCurrentQuestionIndex(currentQuestionIndex + 1)
-        } 
+        }
     }
 
-    console.log(answer); 
+    console.log(answer);
 
     useEffect(() => {
         if (questions.length >= 1 && currentQuestionIndex == questions.length) {
@@ -149,11 +149,43 @@ export default function Quiz() {
         navigate(`../../../lessons/${lessonId}/finish`)
     }
 
+    const iframeRef = useRef(null);
+
+    useEffect(() => {
+        const handleLoad = () => {
+            if (iframeRef.current) {
+                const iframeDocument = iframeRef.current.contentDocument || iframeRef.current.contentWindow.document;
+                const videoElement = iframeDocument.querySelector('video');
+
+                if (videoElement) {
+                    // Применяем стили к элементу video
+                    videoElement.style.width = '100%';
+                    videoElement.style.height = 'auto';
+                    videoElement.style.margin = '0px';
+                    // Добавьте любые другие стили по необходимости
+                } else {
+                    console.error('Видео элемент не найден внутри iframe.');
+                }
+            }
+        };
+
+        const iframeElement = iframeRef.current;
+        if (iframeElement) {
+            iframeElement.addEventListener('load', handleLoad);
+        }
+
+        return () => {
+            if (iframeElement) {
+                iframeElement.removeEventListener('load', handleLoad);
+            }
+        };
+    }, [video]);
+
     if (lessonType == 'видео-урок') return (
         <>
             <div className="container flex flex-col">
                 <Title type={1} title={lessonName} />
-                <iframe className=" aspect-video" src={video ? URL.createObjectURL(video) : null}></iframe>
+                <iframe className=" aspect-video" ref={iframeRef} src={video ? URL.createObjectURL(video) : null}></iframe>
                 <button className="self-end mb-3 mt-5 bg-blue-300" onClick={handleFinish}>закончить</button>
             </div>
             <div className={`clouds ${visibleNotice || visible ? 'vis' : 'hid'}`} style={{

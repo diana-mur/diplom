@@ -138,7 +138,7 @@ export default function Lesson() {
                 setComplite={setComplite}
             />
             {
-                jwt?.roleId == "ADMIN" &&
+                jwt?.roleId == "ADMIN" && data?.typeId == 'тест' &&
                 <div className="container">
                     <Title type={3} title={'Статистика по вопросам'} />
                     <div className="grid grid-cols-1 gap-5 mb-3 lg:grid-cols-2">
