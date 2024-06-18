@@ -1,6 +1,7 @@
+import { } from "dotenv/config";
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize('diplom', 'postgres', '1111', {
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
   dialect: "postgres",
   host: "localhost",
   port: "5432",

@@ -42,7 +42,7 @@ export const Reg = () => {
                     !Array.isArray(regState.error) && regState.error && <p style={{ color: "red" }}>{regState.error}</p>
                 }
                 {
-                    !Array.isArray(regState.error) && regState.message && <p style={{ color: "red" }}>{regState.message}</p>
+                    !Array.isArray(regState.message) && regState.message && <p style={{ color: "red" }}>{regState.message}</p>
                 }
                 {
                     Array.isArray(regState.error) && regState.error.length > 0 && <p style={{ color: "red" }}>{regState.error[0].msg}</p>
