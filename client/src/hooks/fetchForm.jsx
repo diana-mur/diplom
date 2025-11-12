@@ -1,7 +1,9 @@
 import { logOut } from "../redux/authSlice";
 
+console.log(import.meta.env.VITE_APP_API_URL);
+
 export const get = async ({ url, dispatch, token }) => {
-    const json = await fetch(`http://localhost:8080/api/${url}`, {
+    const json = await fetch(`${import.meta.env.VITE_APP_API_URL}${url}`, {
         method: "GET",
         mode: "cors",
         headers: {
@@ -23,7 +25,7 @@ export const get = async ({ url, dispatch, token }) => {
 }
 
 export const post = async ({ url, dispatch, token, data }) => {
-    const json = await fetch(`http://localhost:8080/api/${url}`, {
+    const json = await fetch(`${import.meta.env.VITE_APP_API_URL}${url}`, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -43,10 +45,10 @@ export const post = async ({ url, dispatch, token, data }) => {
         .catch(error => console.log('Error fetching data:', error));
 
     return json
-} 
+}
 
 export const postForFormdata = async ({ url, dispatch, token, formdata }) => {
-    const json = await fetch(`http://localhost:8080/api/${url}`, {
+    const json = await fetch(`${import.meta.env.VITE_APP_API_URL}${url}`, {
         method: "POST",
         mode: 'cors',
         // headers: {

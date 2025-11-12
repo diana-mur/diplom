@@ -49,7 +49,7 @@ export default function Quiz() {
                     const fetchVideo = async () => {
                         if (json.lesson.video) {
                             try {
-                                const response = await fetch(`http://localhost:8080/${json.lesson.video}`);
+                                const response = await fetch(`${import.meta.env.VITE_APP_API_URL}${json.lesson.video}`);
                                 const videoData = await response.arrayBuffer();
                                 const videoBlob = new Blob([videoData], { type: 'video/mp4' })
                                 setVideo(videoBlob)
@@ -88,8 +88,6 @@ export default function Quiz() {
             setCurrentQuestionIndex(currentQuestionIndex + 1)
         }
     }
-
-    console.log(answer);
 
     useEffect(() => {
         if (questions.length >= 1 && currentQuestionIndex == questions.length) {
@@ -211,7 +209,7 @@ export default function Quiz() {
                 {
                     question?.image &&
                     <div className="w-full aspect-video lg:w-1/2">
-                        <img className="object-cover h-full w-full" src={`http://localhost:8080/${question?.image}`} alt="" />
+                        <img className="object-cover h-full w-full" src={`${import.meta.env.VITE_APP_API_URL_IMG}${question?.image}`} alt="" />
                     </div>
                 }
                 <h6 className="mb-3">{question?.question}</h6>

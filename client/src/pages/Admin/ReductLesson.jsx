@@ -118,13 +118,12 @@ export default function ReductLesson() {
 
         if (lessonType == 'видео-урок') formdata.append('video', videoInput)
 
-        const response = await fetch('http://localhost:8080/api/lessons/change', {
+        const response = await fetch(`${import.meta.env.VITE_APP_API_URL}lessons/change`, {
             method: "POST",
             body: formdata
         }).then(data => data.json())
 
         const formArray = new FormData()
-        // console.log(response);
 
         if (lessonType == 'тест') {
             formArray.append('lessonId', lessonId)
@@ -141,7 +140,7 @@ export default function ReductLesson() {
                 formArray.append(`questions[${index}][clue]`, question.clue);
             })
 
-            const response2 = await fetch('http://localhost:8080/api/tests/update', {
+            const response2 = await fetch(`${import.meta.env.VITE_APP_API_URL}tests/update`, {
                 method: "POST",
                 body: formArray
             }).then(data => data.json())
@@ -187,7 +186,7 @@ export default function ReductLesson() {
                 </div>
                 <Title type={4} title={'Сохраненное изображение'} />
                 <div className="w-full mb-5 md:w-1/2 aspect-video overflow-hidden">
-                    <img src={`http://localhost:8080/${image}`} alt="" />
+                    <img src={`${import.meta.env.VITE_APP_API_URL_IMG}${image}`} alt="" />
                 </div>
                 <InputFile file={imageInput} setFile={setImageInput} handleClick={handleClick} idInput={'imageInput'} />
             </div>
@@ -236,7 +235,7 @@ export default function ReductLesson() {
                                         </textarea>
                                         {imageArray.find(item => item.id == q.id) &&
                                             <div className="w-full mb-5 md:w-1/2 aspect-video overflow-hidden">
-                                                <img src={`http://localhost:8080/${imageArray.find(item => item.id == q.id).image}`} alt="" />
+                                                <img src={`${import.meta.env.VITE_APP_API_URL_IMG}${imageArray.find(item => item.id == q.id).image}`} alt="" />
                                             </div>
                                         }
                                         <input id={`fileInput${index}`} type="file" onChange={e => handleChangeDataFile(index, `image`, e)} />

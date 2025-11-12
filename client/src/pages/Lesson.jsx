@@ -113,7 +113,7 @@ export default function Lesson() {
                 </Title>
                 <div className="grid grid-cols-1 gap-5 mb-3 lg:grid-cols-2">
                     <div className="w-full rounded-2xl blue aspect-video box-shadow">
-                        <img src={`http://localhost:8080/${data.image}`} alt="изображение" />
+                        <img src={`${import.meta.env.VITE_APP_API_URL_IMG}${data.image}`} alt="изображение" />
                     </div>
                     <p>{data.content}</p>
                 </div>

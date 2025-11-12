@@ -82,7 +82,7 @@ function NewLesson() {
         formdata.append('categoryId', category)
         if (lessonType == 'видео-урок') formdata.append('video', video)
 
-        const response = await fetch('http://localhost:8080/api/lessons/create', {
+        const response = await fetch(`${import.meta.env.VITE_APP_API_URL}lessons/create`, {
             method: "POST",
             body: formdata
         }).then(data => data.json())
@@ -103,7 +103,7 @@ function NewLesson() {
                 formArray.append(`questions[${index}][clue]`, question.clue);
             })
 
-            const response2 = await fetch('http://localhost:8080/api/tests/create', {
+            const response2 = await fetch(`${import.meta.env.VITE_APP_API_URL}tests/create`, {
                 method: "POST",
                 body: formArray
             }).then(data => data.json())
